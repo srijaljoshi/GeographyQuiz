@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Geography Quiz</string>
+    <string name="title">Geography Quiz</string>
+    <string name="start">Let\'s Start!</string>
 </resources>
