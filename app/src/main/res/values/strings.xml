@@ -2,4 +2,6 @@
     <string name="app_name">Geography Quiz</string>
     <string name="title">Geography Quiz</string>
     <string name="start">Let\'s Start!</string>
+    <string name="results">Results</string>
+    <string name="info">Guess the continent the a country is on as well as its neighbor.</string>
 </resources>
