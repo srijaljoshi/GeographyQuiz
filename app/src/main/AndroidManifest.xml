@@ -9,11 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BasicQuizQuestion6Activity"></activity>
-        <activity android:name=".BasicQuizQuestion5Activity" />
-        <activity android:name=".BasicQuizQuestion4Activity" />
-        <activity android:name=".BasicQuizQuestion3Activity" />
-        <activity android:name=".BasicQuizQuestion2Activity" />
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/HiddenTitleTheme">
@@ -32,7 +27,7 @@
             android:parentActivityName=".SplashScreenActivity"
             android:theme="@style/HiddenTitleTheme" />
         <activity
-            android:name=".BasicQuizQuestion1Activity"
+            android:name=".BasicQuizQuestionActivity"
             android:parentActivityName=".StartQuizActivity"
             android:theme="@style/HiddenTitleTheme" />
     </application>

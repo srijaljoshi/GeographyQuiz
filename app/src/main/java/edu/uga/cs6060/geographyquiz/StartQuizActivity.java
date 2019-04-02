@@ -19,7 +19,7 @@ public class StartQuizActivity extends AppCompatActivity {
         basicQuiz = findViewById( R.id.button3 );
         basicQuiz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), BasicQuizQuestion1Activity.class);
+                Intent intent = new Intent(v.getContext(), BasicQuizQuestionActivity.class);
                 v.getContext().startActivity(intent);
             }
         });

@@ -1,0 +1,46 @@
+package edu.uga.cs6060.geographyquiz;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class BasicQuizQuestionActivity extends AppCompatActivity {
+
+    static final int NUM_ITEMS = 7;
+
+    MyAdapter mAdapter;
+
+    ViewPager mPager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_basic_quiz_question);
+
+        mAdapter = new MyAdapter(getSupportFragmentManager());
+
+        mPager = findViewById(R.id.viewPager1);
+        mPager.setAdapter(mAdapter);
+
+    }
+
+    public static class MyAdapter extends FragmentPagerAdapter {
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return BasicQuizQuestionFragment.newInstance(position);
+        }
+    }
+
+}
