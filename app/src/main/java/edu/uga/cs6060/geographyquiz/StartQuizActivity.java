@@ -16,7 +16,7 @@ public class StartQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_quiz);
 
-        basicQuiz = findViewById( R.id.button3 );
+        basicQuiz = findViewById(R.id.button3);
         basicQuiz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), BasicQuizQuestionActivity.class);
@@ -24,13 +24,13 @@ public class StartQuizActivity extends AppCompatActivity {
             }
         });
 
-//        advancedQuiz = findViewById( R.id.button4 );
-//        advancedQuiz.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent intent = new Intent(v.getContext(), AdvancedQuizQuestion1Activity.class);
-//                v.getContext().startActivity(intent);
-//            }
-//        });
+        advancedQuiz = findViewById(R.id.button4);
+        advancedQuiz.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AdvancedQuizQuestionActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
 

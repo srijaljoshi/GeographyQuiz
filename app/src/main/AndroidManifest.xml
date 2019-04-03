@@ -30,6 +30,10 @@
             android:name=".BasicQuizQuestionActivity"
             android:parentActivityName=".StartQuizActivity"
             android:theme="@style/HiddenTitleTheme" />
+        <activity
+            android:name=".AdvancedQuizQuestionActivity"
+            android:parentActivityName=".StartQuizActivity"
+            android:theme="@style/HiddenTitleTheme" />
     </application>
 
 </manifest>
