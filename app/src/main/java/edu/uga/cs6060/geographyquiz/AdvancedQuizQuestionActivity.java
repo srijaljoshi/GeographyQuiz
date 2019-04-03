@@ -18,7 +18,7 @@ public class AdvancedQuizQuestionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basic_quiz_question);
+        setContentView(R.layout.activity_quiz_question);
 
         mAdapter = new MyAdapter(getSupportFragmentManager());
 
