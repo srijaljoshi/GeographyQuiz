@@ -26,6 +26,10 @@
             android:name=".QuizQuestionActivity"
             android:parentActivityName=".SplashScreenActivity"
             android:theme="@style/HiddenTitleTheme" />
+        <activity
+            android:name=".QuizResultsActivity"
+            android:parentActivityName=".QuizQuestionActivity"
+            android:theme="@style/HiddenTitleTheme" />
     </application>
 
 </manifest>

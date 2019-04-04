@@ -6,16 +6,19 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:layout_width="327dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp"
         android:textSize="22sp"
         android:textStyle="bold" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <RadioButton
@@ -23,26 +26,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/basic_quiz_answer"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/radioButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:text="@string/basic_quiz_answer"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <RadioButton
-            android:id="@+id/radioButto3"
+            android:id="@+id/radioButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:text="@string/basic_quiz_answer"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
     </RadioGroup>
 
 </LinearLayout>
