@@ -4,6 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * SQLiteOpenHelper subclass to create and access our database.
+ * Database schema is defined here.
+ */
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "geography_quiz.db";
@@ -40,7 +44,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_COUNTRIES = "create table " + TABLE_COUNTRIES + "("
             + COUNTRIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COUNTRIES_CONTINENT_ID + " INTEGER, "
-            + COUNTRIES_NAME + " TEXT"
+            + COUNTRIES_NAME + " TEXT, "
+            + "CONSTRAINT fk_continents FOREIGN KEY (" + COUNTRIES_CONTINENT_ID + ")"
+            + "REFERENCES " + TABLE_CONTINENTS + "(" + CONTINENTS_ID + ")"
             + ")";
 
     public static final String CREATE_CONTINENTS = "create table " + TABLE_CONTINENTS + "("
@@ -51,13 +57,26 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_NEIGHBORS = "create table " + TABLE_NEIGHBORS + "("
             + NEIGHBORS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + NEIGHBORS_COUNTRY_ID + " INTEGER, "
-            + NEIGHBORS_NEIGHBOR_ID + " INTEGER"
+            + NEIGHBORS_NEIGHBOR_ID + " INTEGER, "
+            + "CONSTRAINT fk_countries FOREIGN KEY (" + NEIGHBORS_COUNTRY_ID + ")"
+            + "REFERENCES " + TABLE_COUNTRIES + "(" + COUNTRIES_ID + "), "
+            + "CONSTRAINT fk_neighbors FOREIGN KEY (" + NEIGHBORS_NEIGHBOR_ID + ")"
+            + "REFERENCES " + TABLE_COUNTRIES + "(" + COUNTRIES_ID + ")"
             + ")";
 
+    /**
+     * Creates a DBHelper using parent class SQLiteOpenHelper constructor
+     * @param context   Activity context
+     */
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    /**
+     * Create a new instance of DBHelper
+     * @param context   Activity context
+     * @return          Instance of a DBHelper
+     */
     public static synchronized DBHelper getInstance(Context context) {
         if (helperInstance == null) {
             helperInstance = new DBHelper(context.getApplicationContext());
@@ -65,6 +84,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return helperInstance;
     }
 
+    /**
+     * Create database using CREATE String variables
+     * @param db    SQLite database
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CONTINENTS);
@@ -72,11 +95,18 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_NEIGHBORS);
     }
 
+    /**
+     * Update given database by dropping all tables and calling onCreate again
+     * @param db            SQLite database
+     * @param oldVersion    Old version number of database
+     * @param newVersion    New version number of database
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + TABLE_COUNTRIES);
         db.execSQL("drop table if exists " + TABLE_CONTINENTS);
         db.execSQL("drop table if exists " + TABLE_NEIGHBORS);
         db.execSQL("drop table if exists " + TABLE_RESULTS);
+        onCreate(db);
     }
 }
