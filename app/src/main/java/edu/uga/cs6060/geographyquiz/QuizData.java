@@ -2,9 +2,10 @@ package edu.uga.cs6060.geographyquiz;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.opencsv.CSVReader;
 
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuizData {
+
+    final String TAG = "QuizData";
 
     private SQLiteOpenHelper helper;
     private SQLiteDatabase db;
@@ -33,6 +36,7 @@ public class QuizData {
     }
 
     /**
+     * @author  Tripp
      * Gets a list of six questions for the quiz by querying the
      * database through SQLiteOpenHelper object
      * @return  ArrayList of six questions
@@ -51,12 +55,14 @@ public class QuizData {
     }
 
     /**
-     * This method should read the CSV files to create our database
+     * @author  Tripp
+     * This method should read country_continent CSV files to create our database
      * @param in_s  InputStream object made from Resources in Activity
      */
-    public void storeQuestions(InputStream in_s) {
+    public void storeBasicQuestions(InputStream in_s) {
 
-        ContentValues values = new ContentValues();
+        ContentValues values;
+        Cursor cursor;
 
         try {
 
@@ -66,15 +72,47 @@ public class QuizData {
             while ((nextLine = csvReader.readNext()) != null) {
                 values = null;
 
-                db.execSQL("SELECT name FROM " + DBHelper.TABLE_COUNTRIES + " WHERE name = " + nextLine[0]);
-                // TODO: Wrong, need to get name and see if it exists
                 values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
                 values.put(DBHelper.COUNTRIES_CONTINENT_ID, nextLine[1]);
+
+                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
+                Log.d(TAG, "ID created in Countries: " + id);
+
+                // TODO: Need to see if given continent exists
             }
         }
 
         catch (Exception e) {
+            Log.d(TAG, e.toString());
+        }
+    }
 
+    public void storeAdvancedQuestions(InputStream in_s) {
+
+        ContentValues values;
+        Cursor cursor;
+
+        try {
+
+            CSVReader csvReader = new CSVReader(new InputStreamReader(in_s));
+            String nextLine[];
+
+            while ((nextLine = csvReader.readNext()) != null) {
+
+                // TODO: Query DB to find Country IDs
+                values = null;
+                String query = "SELECT _id FROM " + DBHelper.TABLE_COUNTRIES + " WHERE name = " + nextLine[0];
+
+                values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
+                values.put(DBHelper.COUNTRIES_CONTINENT_ID, nextLine[1]);
+
+                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
+                Log.d(TAG, "ID created in Countries: " + id);
+            }
+        }
+
+        catch (Exception e) {
+            Log.d(TAG, e.toString());
         }
     }
 }
