@@ -36,10 +36,19 @@ public class QuizQuestionFragment extends Fragment {
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_quiz_results, container, false);
         } else {
-             rootView = (ViewGroup) inflater.inflate(
-                    R.layout.fragment_quiz_question, container, false);
-//             TextView textView = getView().findViewById(R.id.textView3);
-//             textView.setText("THIS IS NEW TEXT");
+            if(mNum % 2 == 0) {
+                rootView = (ViewGroup) inflater.inflate(
+                        R.layout.fragment_quiz_question, container, false);
+                TextView textView = rootView.findViewById(R.id.textView3);
+                textView.setText("THIS IS A BASIC QUESTION");
+            } else {
+                rootView = (ViewGroup) inflater.inflate(
+                        R.layout.fragment_quiz_question, container, false);
+                TextView textView = rootView.findViewById(R.id.textView3);
+                textView.setText("THIS IS AN ADVANCED QUESTION");
+            }
+
+
         }
 
         return rootView;

@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
-        android:text="@string/basic_quiz_question"
         android:textSize="22sp"
         android:textStyle="bold" />
 

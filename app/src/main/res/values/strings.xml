@@ -2,13 +2,12 @@
     <string name="app_name">Countries Quiz</string>
     <string name="app_description">This app is designed to test your knowledge
     of world geography. The quiz asks you to match countries to their continents and
-        to their neighboring countries.</string>
+        neighboring countries.</string>
     <string name="start_quiz">Start Quiz</string>
     <string name="past_results">Past Results</string>
     <string name="image_description">Globe</string>
     <string name="basic_quiz">Basic Quiz</string>
     <string name="advanced_quiz">Advanced Quiz</string>
-    <string name="basic_quiz_question">1. What continent is Argentina in?</string>
     <string name="basic_quiz_answer">A. North America</string>
     <string name="quiz_results">You scored an 80% on the quiz.</string>
 </resources>
