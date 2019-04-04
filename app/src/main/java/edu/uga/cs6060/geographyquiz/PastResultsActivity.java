@@ -14,21 +14,5 @@ public class PastResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_results);
-
-        setContentView(R.layout.activity_main);
-
-        quizButton = (Button) findViewById(R.id.quiz_button);
-        quizButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startQuiz();
-            }
-        });
     }
-
-    public void startQuiz() {
-        Intent intent = new Intent(this, QuizActivity.class);
-        startActivity(intent);
-    }
-
 }

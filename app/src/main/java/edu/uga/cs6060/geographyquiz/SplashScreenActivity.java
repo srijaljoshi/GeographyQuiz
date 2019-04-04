@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         startQuiz = findViewById( R.id.button1 );
         startQuiz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), StartQuizActivity.class);
+                Intent intent = new Intent(v.getContext(), QuizQuestionActivity.class);
                 v.getContext().startActivity(intent);
             }
         });

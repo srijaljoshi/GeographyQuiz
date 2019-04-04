@@ -1,7 +1,7 @@
 <resources>
     <string name="app_description">This app is designed to test your knowledge
-    of world geography. The basic quiz asks you to match countries to their continents, and
-    the advanced quiz asks you to match them with their neighboring countries.</string>
+    of world geography. The quiz asks you to match countries to their continents and
+        neighboring countries.</string>
     <string name="start_quiz">Start Quiz</string>
     <string name="past_results">Past Results</string>
     <string name="image_description">Globe</string>
@@ -15,4 +15,6 @@
     <string name="start">Let\'s Start!</string>
     <string name="results">Results</string>
     <string name="info">Guess the continent the a country is on as well as its neighbor.</string>
+    <string name="basic_quiz_answer">A. North America</string>
+    <string name="quiz_results">You scored an 80% on the quiz.</string>
 </resources>

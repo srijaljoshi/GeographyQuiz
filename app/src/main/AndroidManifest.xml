@@ -19,24 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".StartQuizActivity"
-            android:parentActivityName=".SplashScreenActivity"
-            android:theme="@style/HiddenTitleTheme">
-        </activity>
-        <activity
             android:name=".PastResultsActivity"
             android:parentActivityName=".SplashScreenActivity"
-            android:theme="@style/HiddenTitleTheme">
-        </activity>
+            android:theme="@style/HiddenTitleTheme" />
         <activity
-            android:name=".BasicQuizQuestion1Activity"
-            android:parentActivityName=".StartQuizActivity"
-            android:theme="@style/HiddenTitleTheme">
-
-        </activity>
-
-        <activity android:name=".QuizActivity">
-        </activity>
+            android:name=".QuizQuestionActivity"
+            android:parentActivityName=".SplashScreenActivity"
+            android:theme="@style/HiddenTitleTheme" />
     </application>
 
 </manifest>
