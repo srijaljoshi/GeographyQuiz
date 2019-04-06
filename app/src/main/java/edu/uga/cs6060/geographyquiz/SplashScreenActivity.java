@@ -29,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         qd.storeBasicQuestions(in_s);
 
         in_s = res.openRawResource(R.raw.country_neighbors);
-        qd.storeBasicQuestions(in_s);
+        qd.storeAdvancedQuestions(in_s);
 
         startQuiz = findViewById( R.id.button1 );
         startQuiz.setOnClickListener(new View.OnClickListener() {
