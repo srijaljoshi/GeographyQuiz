@@ -12,6 +12,7 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuizData {
@@ -63,8 +64,8 @@ public class QuizData {
      */
     public void storeBasicQuestions(InputStream in_s) {
 
-        ContentValues values;
-        ContentValues continent_values;
+        ContentValues country_values = new ContentValues();
+        ContentValues continent_values = new ContentValues();
         Cursor cursor;
         String continent;
         String[] columns = {"name"};
@@ -77,45 +78,31 @@ public class QuizData {
 
             while ((nextLine = csvReader.readNext()) != null) {
 
-                Log.d(TAG, "In while statement");
+                Log.d(TAG, "In while statement.......... NEXTLINE is: " + Arrays.toString(nextLine));
 
-                values = null;
-                continent_values = null;
                 long continent_id = -1;
 
                 continent = nextLine[1];
                 Log.d(TAG, "Continent is " + continent);
                 continent_values.put(DBHelper.CONTINENTS_NAME, continent);
-                cursor = db.query(DBHelper.TABLE_CONTINENTS, columns, "name = " + continent, null,
+                cursor = db.query(DBHelper.TABLE_CONTINENTS, columns, "name = ?", new String[]{continent},
                         null, null, null);
 
-                Log.d(TAG, "storeBasicQuestions: Column index: " + cursor.getLong(cursor.getColumnIndex(DBHelper.CONTINENTS_ID)));
+                int cursorCount = cursor.getCount(); // gets the # of rows returned
+                Log.d(TAG, ">>>>>>>>>>>>CUrSOR COUNT: " +  cursorCount);
 
-                while (cursor.moveToNext()) {
-                    continent_id = cursor.getLong(cursor.getColumnIndex(DBHelper.CONTINENTS_ID));
-                    Log.d(TAG, "storeBasicQuestions: Continent ID: " + continent_id);
-                }
+                continent_id = db.insert(DBHelper.TABLE_CONTINENTS, null, continent_values);
 
-                if (continent_id < 0) {
-                    // Query found no continent, so we make a new one
-                    continent_id = db.insert(DBHelper.TABLE_CONTINENTS, null , continent_values);
-                }
+                Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CONTINENT ID AFTER INSERT: " + continent_id);
+                country_values.put(DBHelper.COUNTRIES_CONTINENT_ID, continent_id);
 
-                else {
-                    Log.d(TAG, "storeBasicQuestions: ID created in Continents: " + continent_id);
-                }
+                country_values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
 
-                values.put(DBHelper.COUNTRIES_CONTINENT_ID, continent_id);
-
-                values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
-
-                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
+                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, country_values);
                 Log.d(TAG, "storeBasicQuestions: ID created in Countries: " + id);
 
             }
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "storeBasicQuestions: Exception in storeBasicQuestions()");
             Log.d(TAG, e.toString());
         }
