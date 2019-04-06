@@ -64,10 +64,11 @@ public class QuizData {
      */
     public void storeBasicQuestions(InputStream in_s) {
 
-        ContentValues country_values = new ContentValues();
+        ContentValues values = new ContentValues();
         ContentValues continent_values = new ContentValues();
         Cursor cursor;
         String continent;
+        String country;
         String[] columns = {"name"};
 
         try {
@@ -78,27 +79,13 @@ public class QuizData {
 
             while ((nextLine = csvReader.readNext()) != null) {
 
-                Log.d(TAG, "In while statement.......... NEXTLINE is: " + Arrays.toString(nextLine));
-
-                long continent_id = -1;
-
+                country = nextLine[0];
                 continent = nextLine[1];
-                Log.d(TAG, "Continent is " + continent);
-                continent_values.put(DBHelper.CONTINENTS_NAME, continent);
-                cursor = db.query(DBHelper.TABLE_CONTINENTS, columns, "name = ?", new String[]{continent},
-                        null, null, null);
 
-                int cursorCount = cursor.getCount(); // gets the # of rows returned
-                Log.d(TAG, ">>>>>>>>>>>>CUrSOR COUNT: " +  cursorCount);
+                values.put(DBHelper.COUNTRIES_NAME, country);
+                values.put(DBHelper.COUNTRIES_CONTINENT, continent);
 
-                continent_id = db.insert(DBHelper.TABLE_CONTINENTS, null, continent_values);
-
-                Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CONTINENT ID AFTER INSERT: " + continent_id);
-                country_values.put(DBHelper.COUNTRIES_CONTINENT_ID, continent_id);
-
-                country_values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
-
-                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, country_values);
+                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
                 Log.d(TAG, "storeBasicQuestions: ID created in Countries: " + id);
 
             }
@@ -119,6 +106,8 @@ public class QuizData {
         Cursor cursor;
         String[] columns = {"_id"};
         String country;
+        long country_id;
+        long neighbor_id;
 
         try {
 
@@ -127,38 +116,50 @@ public class QuizData {
 
             while ((nextLine = csvReader.readNext()) != null) {
 
+                country_id = -1;
                 country = nextLine[0];
-                values = null;
-                long country_id = -1;
-                long neighbor_id = -1;
+                values = new ContentValues();
 
-                cursor = db.query(DBHelper.TABLE_COUNTRIES, columns, "name = " + country,
-                        null, null, null, null);
+
+                cursor = db.query(DBHelper.TABLE_COUNTRIES, columns, "name = ?",
+                        new String[]{country}, null, null, null);
 
                 while (cursor.moveToNext()) {
                     country_id = cursor.getLong(cursor.getColumnIndex(DBHelper.COUNTRIES_ID));
                 }
 
                 cursor.close();
+                if (country_id != -1) {
+                    Log.d(TAG, "Found Country " + country + ", ID: " + country_id);
+                }
 
                 values.put(DBHelper.NEIGHBORS_COUNTRY_ID, country_id);
 
                 for (int i = 1; i < nextLine.length; i++) {
+
+                    neighbor_id = -1;
+
                     country = nextLine[i];
-                    cursor = db.query(DBHelper.TABLE_COUNTRIES, columns, "name = " + country,
-                            null, null, null, null);
+                    cursor = db.query(DBHelper.TABLE_COUNTRIES, columns, "name = ?",
+                            new String[]{country}, null, null, null);
 
                     while(cursor.moveToNext()) {
                         neighbor_id = cursor.getLong(cursor.getColumnIndex(DBHelper.COUNTRIES_ID));
                     }
                     cursor.close();
+                    if (neighbor_id != -1) {
+                        Log.d(TAG, "Found Neighbor " + country + ", ID: " + neighbor_id);
+                    }
+                    else {
+                        break;
+                    }
 
                     values.put(DBHelper.NEIGHBORS_NEIGHBOR_ID, neighbor_id);
                     long result = db.insert(DBHelper.TABLE_NEIGHBORS, null, values);
                     Log.d(TAG, "New Neighbor Id: " + result);
 
-                    values = null;
-                    values.put(DBHelper.NEIGHBORS_COUNTRY_ID, country_id);
+                    //values = null;
+                    //values.put(DBHelper.NEIGHBORS_COUNTRY_ID, country_id);
                 }
             }
         }

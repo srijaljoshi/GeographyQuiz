@@ -23,15 +23,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TABLE_NEIGHBORS = "neighbors";
     public static final String TABLE_RESULTS = "results";
 
+
     // Column Names
     // Countries table columns
     public static final String COUNTRIES_ID = "_id";
-    public static final String COUNTRIES_CONTINENT_ID = "contient_id";
+    public static final String COUNTRIES_CONTINENT = "continent";
     public static final String COUNTRIES_NAME = "name";
-
-    // Continents table columns
-    public static final String CONTINENTS_ID = "_id";
-    public static final String CONTINENTS_NAME = "name";
 
     // Association Table Neighbors between Countries and Continents
     // Neighbors table columns
@@ -46,15 +43,8 @@ public class DBHelper extends SQLiteOpenHelper {
     // Define Queries to create Tables
     public static final String CREATE_COUNTRIES = "create table if not exists " + TABLE_COUNTRIES + "("
             + COUNTRIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COUNTRIES_CONTINENT_ID + " INTEGER, "
-            + COUNTRIES_NAME + " TEXT, "
-            + "CONSTRAINT fk_continents FOREIGN KEY (" + COUNTRIES_CONTINENT_ID + ")"
-            + "REFERENCES " + TABLE_CONTINENTS + "(" + CONTINENTS_ID + ")"
-            + ")";
-
-    public static final String CREATE_CONTINENTS = "create table if not exists " + TABLE_CONTINENTS + "("
-            + CONTINENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + CONTINENTS_NAME + " TEXT"
+            + COUNTRIES_CONTINENT+ " TEXT, "
+            + COUNTRIES_NAME + " TEXT"
             + ")";
 
     public static final String CREATE_NEIGHBORS = "create table if not exists " + TABLE_NEIGHBORS + "("
@@ -89,12 +79,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * @author  Tripp
      * Create database using CREATE String variables
      * @param db    SQLite database
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_CONTINENTS);
         db.execSQL(CREATE_COUNTRIES);
         db.execSQL(CREATE_NEIGHBORS);
         Log.d(TAG, "Tables Created");
@@ -109,7 +99,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + TABLE_COUNTRIES);
-        db.execSQL("drop table if exists " + TABLE_CONTINENTS);
         db.execSQL("drop table if exists " + TABLE_NEIGHBORS);
         db.execSQL("drop table if exists " + TABLE_RESULTS);
         Log.d(TAG, "onUpgrade called");

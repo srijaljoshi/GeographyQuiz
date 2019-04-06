@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     Button viewResults;
 
     QuizData quizData;
-    InputStream in_s
+    InputStream in_s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
