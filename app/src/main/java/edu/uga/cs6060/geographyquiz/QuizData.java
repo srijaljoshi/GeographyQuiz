@@ -27,6 +27,8 @@ public class QuizData {
 
     public void open() {
         db = helper.getWritableDatabase();
+        helper.onCreate(db);
+        Log.d(TAG, "DB opened " + db.toString());
     }
 
     public void close() {
@@ -36,6 +38,7 @@ public class QuizData {
     }
 
     /**
+     * @author  Tripp
      * Gets a list of six questions for the quiz by querying the
      * database through SQLiteOpenHelper object
      * @return  ArrayList of six questions
@@ -70,20 +73,27 @@ public class QuizData {
 
             CSVReader csvReader = new CSVReader(new InputStreamReader(in_s));
             String nextLine[];
+            Log.d(TAG, "In try statement");
 
             while ((nextLine = csvReader.readNext()) != null) {
+
+                Log.d(TAG, "In while statement");
 
                 values = null;
                 continent_values = null;
                 long continent_id = -1;
 
                 continent = nextLine[1];
+                Log.d(TAG, "Continent is " + continent);
                 continent_values.put(DBHelper.CONTINENTS_NAME, continent);
                 cursor = db.query(DBHelper.TABLE_CONTINENTS, columns, "name = " + continent, null,
                         null, null, null);
 
+                Log.d(TAG, "storeBasicQuestions: Column index: " + cursor.getLong(cursor.getColumnIndex(DBHelper.CONTINENTS_ID)));
+
                 while (cursor.moveToNext()) {
                     continent_id = cursor.getLong(cursor.getColumnIndex(DBHelper.CONTINENTS_ID));
+                    Log.d(TAG, "storeBasicQuestions: Continent ID: " + continent_id);
                 }
 
                 if (continent_id < 0) {
@@ -92,7 +102,7 @@ public class QuizData {
                 }
 
                 else {
-                    Log.d(TAG, "ID created in Continents: " + continent_id);
+                    Log.d(TAG, "storeBasicQuestions: ID created in Continents: " + continent_id);
                 }
 
                 values.put(DBHelper.COUNTRIES_CONTINENT_ID, continent_id);
@@ -100,12 +110,13 @@ public class QuizData {
                 values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
 
                 long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
-                Log.d(TAG, "ID created in Countries: " + id);
+                Log.d(TAG, "storeBasicQuestions: ID created in Countries: " + id);
 
             }
         }
 
         catch (Exception e) {
+            Log.d(TAG, "storeBasicQuestions: Exception in storeBasicQuestions()");
             Log.d(TAG, e.toString());
         }
     }

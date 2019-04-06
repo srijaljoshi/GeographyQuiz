@@ -3,12 +3,15 @@ package edu.uga.cs6060.geographyquiz;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * SQLiteOpenHelper subclass to create and access our database.
  * Database schema is defined here.
  */
 public class DBHelper extends SQLiteOpenHelper {
+
+    public static final String TAG = "DBHELPER";
 
     private static final String DB_NAME = "geography_quiz.db";
     private static final int DB_VERSION = 1;
@@ -41,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String RESULTS_ID = "_id";
 
     // Define Queries to create Tables
-    public static final String CREATE_COUNTRIES = "create table " + TABLE_COUNTRIES + "("
+    public static final String CREATE_COUNTRIES = "create table if not exists " + TABLE_COUNTRIES + "("
             + COUNTRIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COUNTRIES_CONTINENT_ID + " INTEGER, "
             + COUNTRIES_NAME + " TEXT, "
@@ -49,12 +52,12 @@ public class DBHelper extends SQLiteOpenHelper {
             + "REFERENCES " + TABLE_CONTINENTS + "(" + CONTINENTS_ID + ")"
             + ")";
 
-    public static final String CREATE_CONTINENTS = "create table " + TABLE_CONTINENTS + "("
-            + CONTINENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+    public static final String CREATE_CONTINENTS = "create table if not exists " + TABLE_CONTINENTS + "("
+            + CONTINENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CONTINENTS_NAME + " TEXT"
             + ")";
 
-    public static final String CREATE_NEIGHBORS = "create table " + TABLE_NEIGHBORS + "("
+    public static final String CREATE_NEIGHBORS = "create table if not exists " + TABLE_NEIGHBORS + "("
             + NEIGHBORS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + NEIGHBORS_COUNTRY_ID + " INTEGER, "
             + NEIGHBORS_NEIGHBOR_ID + " INTEGER, "
@@ -80,6 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static synchronized DBHelper getInstance(Context context) {
         if (helperInstance == null) {
             helperInstance = new DBHelper(context.getApplicationContext());
+            Log.d(TAG, "New Helper made");
         }
         return helperInstance;
     }
@@ -93,6 +97,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_CONTINENTS);
         db.execSQL(CREATE_COUNTRIES);
         db.execSQL(CREATE_NEIGHBORS);
+        Log.d(TAG, "Tables Created");
     }
 
     /**
@@ -107,6 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists " + TABLE_CONTINENTS);
         db.execSQL("drop table if exists " + TABLE_NEIGHBORS);
         db.execSQL("drop table if exists " + TABLE_RESULTS);
+        Log.d(TAG, "onUpgrade called");
         onCreate(db);
     }
 }
