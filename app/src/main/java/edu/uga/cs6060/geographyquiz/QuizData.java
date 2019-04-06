@@ -124,7 +124,7 @@ public class QuizData {
                 continent = null;
                 id = -1;
 
-                values.put(DBHelper.QUESTIONS_NAME, country);
+                values.put(DBHelper.QUESTIONS_COUNTRY, country);
                 values.put(DBHelper.QUESTIONS_CONTINENT, continent);
 
                 for (int i = 1; i < nextLine.length; i++) {
