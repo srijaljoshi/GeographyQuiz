@@ -64,10 +64,11 @@ public class QuizData {
      */
     public void storeBasicQuestions(InputStream in_s) {
 
-        ContentValues country_values = new ContentValues();
+        ContentValues values = new ContentValues();
         ContentValues continent_values = new ContentValues();
         Cursor cursor;
         String continent;
+        String country;
         String[] columns = {"name"};
 
         try {
@@ -78,27 +79,13 @@ public class QuizData {
 
             while ((nextLine = csvReader.readNext()) != null) {
 
-                Log.d(TAG, "In while statement.......... NEXTLINE is: " + Arrays.toString(nextLine));
-
-                long continent_id = -1;
-
+                country = nextLine[0];
                 continent = nextLine[1];
-                Log.d(TAG, "Continent is " + continent);
-                continent_values.put(DBHelper.CONTINENTS_NAME, continent);
-                cursor = db.query(DBHelper.TABLE_CONTINENTS, columns, "name = ?", new String[]{continent},
-                        null, null, null);
 
-                int cursorCount = cursor.getCount(); // gets the # of rows returned
-                Log.d(TAG, ">>>>>>>>>>>>CUrSOR COUNT: " +  cursorCount);
+                values.put(DBHelper.COUNTRIES_NAME, country);
+                values.put(DBHelper.COUNTRIES_CONTINENT, continent);
 
-                continent_id = db.insert(DBHelper.TABLE_CONTINENTS, null, continent_values);
-
-                Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CONTINENT ID AFTER INSERT: " + continent_id);
-                country_values.put(DBHelper.COUNTRIES_CONTINENT_ID, continent_id);
-
-                country_values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
-
-                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, country_values);
+                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
                 Log.d(TAG, "storeBasicQuestions: ID created in Countries: " + id);
 
             }
