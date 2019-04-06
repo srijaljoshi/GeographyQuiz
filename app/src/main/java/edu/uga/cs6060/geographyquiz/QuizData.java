@@ -2,6 +2,7 @@ package edu.uga.cs6060.geographyquiz;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -19,7 +20,7 @@ public class QuizData {
 
     public static final String TAG = "QuizData";
 
-    private SQLiteOpenHelper helper;
+    private DBHelper helper;
     private SQLiteDatabase db;
 
     public QuizData(Context context) {
@@ -57,19 +58,36 @@ public class QuizData {
         return questions;
     }
 
+    public void populateDatabase(Resources res) {
+
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM countries", null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+
+        if (count <=0 ) {
+            InputStream in_s = res.openRawResource(R.raw.country_continent);
+            storeBasicQuestions(in_s);
+
+            in_s = res.openRawResource(R.raw.country_neighbors);
+            storeAdvancedQuestions(in_s);
+        }
+
+        else {
+            Log.d(TAG, "Data already existed");
+        }
+
+    }
+
     /**
      * @author  Tripp
      * This method should read country_continent CSV file to create our Country and Continent Table
      * @param in_s  InputStream object made from Resources in Activity
      */
-    public void storeBasicQuestions(InputStream in_s) {
+    private void storeBasicQuestions(InputStream in_s) {
 
         ContentValues values = new ContentValues();
-        ContentValues continent_values = new ContentValues();
-        Cursor cursor;
         String continent;
         String country;
-        String[] columns = {"name"};
 
         try {
 
@@ -100,7 +118,7 @@ public class QuizData {
      * This method should read country_neighbors CSV file to create our Neighbors Table
      * @param in_s  InputStream object made from Resources in Activity
      */
-    public void storeAdvancedQuestions(InputStream in_s) {
+    private void storeAdvancedQuestions(InputStream in_s) {
 
         ContentValues values;
         Cursor cursor;

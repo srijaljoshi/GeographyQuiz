@@ -25,11 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         qd.open();
 
-        InputStream in_s =  res.openRawResource(R.raw.country_continent);
-        qd.storeBasicQuestions(in_s);
-
-        in_s = res.openRawResource(R.raw.country_neighbors);
-        qd.storeAdvancedQuestions(in_s);
+        qd.populateDatabase(this.getResources());
 
         startQuiz = findViewById( R.id.button1 );
         startQuiz.setOnClickListener(new View.OnClickListener() {
