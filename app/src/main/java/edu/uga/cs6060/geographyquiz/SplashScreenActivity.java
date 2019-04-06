@@ -18,8 +18,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     Button viewResults;
 
     QuizData quizData;
-    InputStream ins_basic;
-    InputStream ins_advanced;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +27,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         Resources res = getResources();
         quizData = new QuizData(this);
 
-        // Different inputstreams so that passing the argument is simpler
-        ins_basic = res.openRawResource(R.raw.country_continent);
-        ins_advanced = res.openRawResource(R.raw.country_neighbors);
-
         // open the db and getWritableDatabase
         quizData.open();
 
         // Call the aynctask to populate the database
-        new DBWriterTask().execute();
+        new DBWriterTask().execute(getResources());
 
         startQuiz = findViewById(R.id.button1);
         startQuiz.setOnClickListener(new View.OnClickListener() {
@@ -62,13 +56,12 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Since we are not really passing any parameter or expecting any result, we set the
      * AsyncTask<Params, Progress, Results> to Void
      */
-    private class DBWriterTask extends AsyncTask<Void, Void, Void> {
+    private class DBWriterTask extends AsyncTask<Resources, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(Resources... resources) {
             // Write the parameters to the database
-            quizData.storeBasicQuestions(ins_basic);
-            quizData.storeAdvancedQuestions(ins_advanced);
+            quizData.populateDatabase(resources[0]);
             return null;
         }
 

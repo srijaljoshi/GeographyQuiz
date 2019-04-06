@@ -2,8 +2,11 @@ package edu.uga.cs6060.geographyquiz;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.io.File;
 
 /**
  * SQLiteOpenHelper subclass to create and access our database.
@@ -85,9 +88,11 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CREATE_COUNTRIES);
         db.execSQL(CREATE_NEIGHBORS);
         Log.d(TAG, "Tables Created");
+
     }
 
     /**
@@ -104,4 +109,21 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "onUpgrade called");
         onCreate(db);
     }
+
+    /* public  boolean isDbPresent() {
+        Log.v(TAG, "is DB present Entry!!!");
+        boolean checkFlag = true;
+        SQLiteDatabase testDb;
+        try{
+            testDb = SQLiteDatabase.openDatabase("/data/user/0/edu.uga.cs6060.geographyquiz/databases/geography_quiz.db",
+                    null,
+                    SQLiteDatabase.OPEN_READWRITE);
+        }
+        catch(SQLiteException sqlException){
+            Log.d(TAG, "DB not fournd");
+            checkFlag=false;
+        }
+        Log.d(TAG, "DB exists present Exit!!!");
+        return checkFlag;
+    } */
 }
