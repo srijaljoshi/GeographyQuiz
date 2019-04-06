@@ -3,6 +3,7 @@ package edu.uga.cs6060.geographyquiz;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * SQLiteOpenHelper subclass to create and access our database.
@@ -10,58 +11,61 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = "DBHELPER";
+
     private static final String DB_NAME = "geography_quiz.db";
     private static final int DB_VERSION = 1;
     private static DBHelper helperInstance;
 
     // Table Names
-    public static final String TABLE_COUNTRIES = "countries";
-    public static final String TABLE_CONTINENTS = "continents";
-    public static final String TABLE_NEIGHBORS = "neighbors";
-    public static final String TABLE_RESULTS = "results";
+    static final String TABLE_QUESTIONS = "QUESTIONS";
+    static final String TABLE_QUIZZES = "QUIZZES";
+    static final String TABLE_RELATIONSHIPS = "RELATIONSHIPS";
 
     // Column Names
-    // Countries table columns
-    public static final String COUNTRIES_ID = "_id";
-    public static final String COUNTRIES_CONTINENT_ID = "contient_id";
-    public static final String COUNTRIES_NAME = "name";
+    // QUESTIONS table columns
+    static final String QUESTIONS_ID = "_id";
+    static final String QUESTIONS_COUNTRY = "country";
+    static final String QUESTIONS_CONTINENT = "continent";
+    static final String QUESTIONS_NEIGHBOR = "neighbor";
 
-    // Continents table columns
-    public static final String CONTINENTS_ID = "_id";
-    public static final String CONTINENTS_NAME = "name";
+    static final String RELATIONSHIPS_ID = "_id";
+    static final String RELATIONSHIPS_QUIZ_ID = "quiz_id";
+    static final String RELATIONSHIPS_QUESTION_ID = "question_id";
 
-    // Association Table Neighbors between Countries and Continents
-    // Neighbors table columns
-    public static final String NEIGHBORS_ID = "_id";
-    public static final String NEIGHBORS_COUNTRY_ID = "country_id";
-    public static final String NEIGHBORS_NEIGHBOR_ID = "neighbor_id";
+    static final String QUIZZES_ID = "_id";
+    static final String QUIZZES_DATE = "date";
+    static final String QUIZZES_RESULT = "result";
+
 
     // Results table columns
     // TODO: define Results table
     public static final String RESULTS_ID = "_id";
+    public static final String RESULTS_DATE = "quiz_date";
+    public static final String RESULTS_RESULT = "result";
 
     // Define Queries to create Tables
-    public static final String CREATE_COUNTRIES = "create table " + TABLE_COUNTRIES + "("
-            + COUNTRIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COUNTRIES_CONTINENT_ID + " INTEGER, "
-            + COUNTRIES_NAME + " TEXT, "
-            + "CONSTRAINT fk_continents FOREIGN KEY (" + COUNTRIES_CONTINENT_ID + ")"
-            + "REFERENCES " + TABLE_CONTINENTS + "(" + CONTINENTS_ID + ")"
+    public static final String CREATE_QUESTIONS = "create table if not exists " + TABLE_QUESTIONS + "("
+            + QUESTIONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + QUESTIONS_CONTINENT+ " TEXT, "
+            + QUESTIONS_COUNTRY + " TEXT, "
+            + QUESTIONS_NEIGHBOR + " TEXT"
             + ")";
 
-    public static final String CREATE_CONTINENTS = "create table " + TABLE_CONTINENTS + "("
-            + CONTINENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + CONTINENTS_NAME + " TEXT"
+    public static final String CREATE_RELATIONSHIPS = "create table if not exists " + TABLE_RELATIONSHIPS + "("
+            + RELATIONSHIPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + RELATIONSHIPS_QUIZ_ID + " INTEGER, "
+            + RELATIONSHIPS_QUESTION_ID + " INTEGER, "
+            + "CONSTRAINT fk_question FOREIGN KEY (" + RELATIONSHIPS_QUESTION_ID + ")"
+            + "REFERENCES " + TABLE_QUESTIONS + "(" + QUESTIONS_ID + "), "
+            + "CONSTRAINT fk_quiz FOREIGN KEY (" + RELATIONSHIPS_QUIZ_ID + ")"
+            + "REFERENCES " + TABLE_QUIZZES + "(" + QUIZZES_ID + ")"
             + ")";
 
-    public static final String CREATE_NEIGHBORS = "create table " + TABLE_NEIGHBORS + "("
-            + NEIGHBORS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + NEIGHBORS_COUNTRY_ID + " INTEGER, "
-            + NEIGHBORS_NEIGHBOR_ID + " INTEGER, "
-            + "CONSTRAINT fk_countries FOREIGN KEY (" + NEIGHBORS_COUNTRY_ID + ")"
-            + "REFERENCES " + TABLE_COUNTRIES + "(" + COUNTRIES_ID + "), "
-            + "CONSTRAINT fk_neighbors FOREIGN KEY (" + NEIGHBORS_NEIGHBOR_ID + ")"
-            + "REFERENCES " + TABLE_COUNTRIES + "(" + COUNTRIES_ID + ")"
+    public static final String CREATE_QUIZZES = "create table if not exists " + TABLE_QUIZZES + "("
+            + QUIZZES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + QUIZZES_DATE + " DATE, "
+            + QUIZZES_RESULT + " INTEGER"
             + ")";
 
     /**
@@ -80,19 +84,24 @@ public class DBHelper extends SQLiteOpenHelper {
     public static synchronized DBHelper getInstance(Context context) {
         if (helperInstance == null) {
             helperInstance = new DBHelper(context.getApplicationContext());
+            Log.d(TAG, "New Helper made");
         }
         return helperInstance;
     }
 
     /**
+     * @author  Tripp
      * Create database using CREATE String variables
      * @param db    SQLite database
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_CONTINENTS);
-        db.execSQL(CREATE_COUNTRIES);
-        db.execSQL(CREATE_NEIGHBORS);
+
+        db.execSQL(CREATE_QUESTIONS);
+        db.execSQL(CREATE_QUIZZES);
+        db.execSQL(CREATE_RELATIONSHIPS);
+        Log.d(TAG, "Tables Created");
+
     }
 
     /**
@@ -103,10 +112,10 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists " + TABLE_COUNTRIES);
-        db.execSQL("drop table if exists " + TABLE_CONTINENTS);
-        db.execSQL("drop table if exists " + TABLE_NEIGHBORS);
-        db.execSQL("drop table if exists " + TABLE_RESULTS);
+        db.execSQL("drop table if exists " + TABLE_QUESTIONS);
+        db.execSQL("drop table if exists " + TABLE_RELATIONSHIPS);
+        db.execSQL("drop table if exists " + TABLE_QUIZZES);
+        Log.d(TAG, "onUpgrade called");
         onCreate(db);
     }
 }

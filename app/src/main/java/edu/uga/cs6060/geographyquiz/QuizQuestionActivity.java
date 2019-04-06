@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuizQuestionActivity extends AppCompatActivity {
 
     static final int NUM_ITEMS = 13;
@@ -14,6 +17,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
     MyAdapter mAdapter;
 
     ViewPager mPager;
+
+    List<Question> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,10 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         mPager = findViewById(R.id.viewPager1);
         mPager.setAdapter(mAdapter);
+
+        QuizData quizData = new QuizData(this);
+        quizData.open();
+        list = quizData.getQuestions();
 
     }
 
