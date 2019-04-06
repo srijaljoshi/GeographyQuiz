@@ -33,6 +33,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Call the aynctask to populate the database
         new DBWriterTask().execute(getResources());
 
+        quizData.getQuestions();
+
         startQuiz = findViewById(R.id.button1);
         startQuiz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

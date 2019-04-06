@@ -28,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
     // Column Names
     // QUESTIONS table columns
     public static final String QUESTIONS_ID = "_id";
-    public static final String QUESTIONS_NAME = "name";
+    public static final String QUESTIONS_NAME = "country";
     public static final String QUESTIONS_CONTINENT = "continent";
     public static final String QUESTIONS_NEIGHBOR = "neighbor";
 
