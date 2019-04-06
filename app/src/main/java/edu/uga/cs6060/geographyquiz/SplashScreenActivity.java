@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.InputStream;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     Button startQuiz;
@@ -31,6 +33,15 @@ public class SplashScreenActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+
+
+        InputStream is = getResources().openRawResource(R.raw.country_continent);
+        //InputStream is2 = getResources().openRawResource(R.raw.country_neighbors);
+        QuizData quizData = new QuizData(this);
+        quizData.open();
+        quizData.storeBasicQuestions(is);
+        //quizData.storeAdvancedQuestions(is2);
+        quizData.close();
 
 
     }

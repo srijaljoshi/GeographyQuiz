@@ -15,4 +15,5 @@
     <string name="info">Guess the continent the a country is on as well as its neighbor.</string>
     <string name="quiz_results">You scored an 80% on the quiz.</string>
     <string name="submit_quiz">Submit Quiz</string>
+    <string name="go_home">Go Home</string>
 </resources>
