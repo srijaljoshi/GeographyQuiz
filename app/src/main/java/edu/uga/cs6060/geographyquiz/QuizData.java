@@ -62,7 +62,7 @@ public class QuizData {
                 int random = (int) (Math.random() * 599);    // Variable to pick random country id
                 cursor = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_QUESTIONS + " WHERE _id = ?", new String[]{"" + random});
                 cursor.moveToFirst();
-                country = cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_NAME));
+                country = cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_COUNTRY));
                 Log.d(TAG, "Country found: " + country);
 
                 if (!ArrayUtils.contains(countries, country)) {

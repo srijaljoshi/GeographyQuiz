@@ -31,6 +31,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
         mPager.setAdapter(mAdapter);
 
         QuizData quizData = new QuizData(this);
+        quizData.open();
         list = quizData.getQuestions();
 
     }

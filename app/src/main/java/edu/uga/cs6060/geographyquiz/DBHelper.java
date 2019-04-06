@@ -23,12 +23,12 @@ public class DBHelper extends SQLiteOpenHelper {
     // Table Names
     public static final String TABLE_QUESTIONS = "QUESTIONS";
     public static final String TABLE_QUIZZES = "QUIZZES";
-    public static final String TABLE_RELATIONSHIPS = "RELATIONSHIPs";
+    public static final String TABLE_RELATIONSHIPS = "RELATIONSHIPS";
 
     // Column Names
     // QUESTIONS table columns
     public static final String QUESTIONS_ID = "_id";
-    public static final String QUESTIONS_NAME = "country";
+    public static final String QUESTIONS_COUNTRY = "country";
     public static final String QUESTIONS_CONTINENT = "continent";
     public static final String QUESTIONS_NEIGHBOR = "neighbor";
 
@@ -51,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_QUESTIONS = "create table if not exists " + TABLE_QUESTIONS + "("
             + QUESTIONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + QUESTIONS_CONTINENT+ " TEXT, "
-            + QUESTIONS_NAME + " TEXT, "
+            + QUESTIONS_COUNTRY + " TEXT, "
             + QUESTIONS_NEIGHBOR + " TEXT"
             + ")";
 
