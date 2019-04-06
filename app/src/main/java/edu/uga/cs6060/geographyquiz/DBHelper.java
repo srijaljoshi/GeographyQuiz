@@ -2,11 +2,8 @@ package edu.uga.cs6060.geographyquiz;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import java.io.File;
 
 /**
  * SQLiteOpenHelper subclass to create and access our database.
@@ -14,31 +11,31 @@ import java.io.File;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String TAG = "DBHELPER";
+    private static final String TAG = "DBHELPER";
 
     private static final String DB_NAME = "geography_quiz.db";
     private static final int DB_VERSION = 1;
     private static DBHelper helperInstance;
 
     // Table Names
-    public static final String TABLE_QUESTIONS = "QUESTIONS";
-    public static final String TABLE_QUIZZES = "QUIZZES";
-    public static final String TABLE_RELATIONSHIPS = "RELATIONSHIPS";
+    static final String TABLE_QUESTIONS = "QUESTIONS";
+    static final String TABLE_QUIZZES = "QUIZZES";
+    static final String TABLE_RELATIONSHIPS = "RELATIONSHIPS";
 
     // Column Names
     // QUESTIONS table columns
-    public static final String QUESTIONS_ID = "_id";
-    public static final String QUESTIONS_COUNTRY = "country";
-    public static final String QUESTIONS_CONTINENT = "continent";
-    public static final String QUESTIONS_NEIGHBOR = "neighbor";
+    static final String QUESTIONS_ID = "_id";
+    static final String QUESTIONS_COUNTRY = "country";
+    static final String QUESTIONS_CONTINENT = "continent";
+    static final String QUESTIONS_NEIGHBOR = "neighbor";
 
-    public static final String RELATIONSHIPS_ID = "_id";
-    public static final String RELATIONSHIPS_QUIZ_ID = "quiz_id";
-    public static final String RELATIONSHIPS_QUESTION_ID = "question_id";
+    static final String RELATIONSHIPS_ID = "_id";
+    static final String RELATIONSHIPS_QUIZ_ID = "quiz_id";
+    static final String RELATIONSHIPS_QUESTION_ID = "question_id";
 
-    public static final String QUIZZES_ID = "_id";
-    public static final String QUIZZES_DATE = "date";
-    public static final String QUIZZES_RESULT = "result";
+    static final String QUIZZES_ID = "_id";
+    static final String QUIZZES_DATE = "date";
+    static final String QUIZZES_RESULT = "result";
 
 
     // Results table columns

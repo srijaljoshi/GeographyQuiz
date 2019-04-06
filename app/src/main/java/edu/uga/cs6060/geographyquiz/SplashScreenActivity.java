@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.InputStream;
-
 public class SplashScreenActivity extends AppCompatActivity {
 
     private final static String TAG = "SplashScreenActivity";
@@ -31,9 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         quizData.open();
 
         // Call the aynctask to populate the database
-        new DBWriterTask().execute(getResources());
-
-        quizData.getQuestions();
+        new DBWriterTask().execute(res);
 
         startQuiz = findViewById(R.id.button1);
         startQuiz.setOnClickListener(new View.OnClickListener() {

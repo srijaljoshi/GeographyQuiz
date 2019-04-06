@@ -77,7 +77,7 @@ public class QuizData {
         }
 
         for (Question q : questions) {
-            System.out.println(q.country + " " + q.continent_answer + " " + q.neighbor_answer);
+            System.out.println(q.getCountry() + " " + q.getContinent_answer() + " " + q.getNeighbor_answer());
         }
         return questions;
     }
@@ -95,13 +95,13 @@ public class QuizData {
         else {
             Log.d(TAG, "Data already existed");
         }
-
+        cursor.close();
     }
 
     /**
      * @author  Tripp
      * This method should read country_continent CSV file to create our Country and Continent Table
-     * @param res
+     * @param res The raw resource (csv file) passed from the calling activity
      */
     private void storeNeighbors(Resources res) {
 
@@ -122,14 +122,13 @@ public class QuizData {
 
                 country = nextLine[0];
                 continent = null;
-                id = -1;
 
                 values.put(DBHelper.QUESTIONS_COUNTRY, country);
                 values.put(DBHelper.QUESTIONS_CONTINENT, continent);
 
                 for (int i = 1; i < nextLine.length; i++) {
                     neighbor = nextLine[i];
-                    if (!neighbor.equals("")) {
+                    if (!neighbor.equals("")) { // ignore if the csv file has consecutive commas
                         values.put(DBHelper.QUESTIONS_NEIGHBOR, neighbor);
                         id = db.insert(DBHelper.TABLE_QUESTIONS, null, values);
                         Log.d(TAG, "Question made, ID: " + id);
@@ -140,6 +139,8 @@ public class QuizData {
                 }
             }
 
+            // The continent column will be null after populating countries and neighbors
+            // That is why we update the continent column separately
             updateContinents(res);
         } catch (Exception e) {
             Log.d(TAG, "storeBasicQuestions: Exception in storeBasicQuestions()");
@@ -147,7 +148,7 @@ public class QuizData {
         }
     }
 
-    public void updateContinents(Resources res) {
+    private void updateContinents(Resources res) {
 
         String country;
         String continent;
@@ -173,7 +174,7 @@ public class QuizData {
         }
 
         catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
