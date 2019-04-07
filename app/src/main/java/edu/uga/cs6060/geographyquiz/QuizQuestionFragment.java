@@ -3,7 +3,6 @@ package edu.uga.cs6060.geographyquiz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,19 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Random;
-
-import static android.content.ContentValues.TAG;
 
 
 public class QuizQuestionFragment extends Fragment {
 
     int mNum;
+    static List<Question> list;
 
-    static QuizQuestionFragment newInstance(int num) {
+    static QuizQuestionFragment newInstance(int num, List<Question> questionList) {
         QuizQuestionFragment f = new QuizQuestionFragment();
+
+        list = questionList;
 
         Bundle args = new Bundle();
         args.putInt("num", num);
@@ -58,69 +59,59 @@ public class QuizQuestionFragment extends Fragment {
 
             if(mNum % 2 == 0) {
                 rootView = (ViewGroup) inflater.inflate(
-                        R.layout.fragment_quiz_question, container, false);
-
-                //get random country
-                //get correct continent country is in
-                //store correct continent in db?
-                //get 2 other random continents
+                        R.layout.fragment_basic_question, container, false);
 
                 TextView textView = rootView.findViewById(R.id.textView3);
-                textView.setText("What continent is Argentina in?");
+                textView.setText(getString(R.string.basic_question, list.get(mNum).getCountry()));
                 if(correctAnswer == 1) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText("A. Correct Continent");
+                    choice1.setText(getString(R.string.choice1, list.get(mNum).getContinent_answer()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText("B. Random Continent");
+                    choice2.setText(getString(R.string.choice2, "Random Continent"));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText("C. Random Continent");
+                    choice3.setText(getString(R.string.choice3, "Random Continent"));
                 } else if (correctAnswer == 2) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText("A. Random Continent");
+                    choice1.setText(getString(R.string.choice1, "Random Continent"));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText("B. Correct Continent");
+                    choice2.setText(getString(R.string.choice2, list.get(mNum).getContinent_answer()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText("C. Random Continent");
+                    choice3.setText(getString(R.string.choice3, "Random Continent"));
                 } else {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText("A. Random Continent");
+                    choice1.setText(getString(R.string.choice1, "Random Continent"));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText("B. Random Continent");
+                    choice2.setText(getString(R.string.choice2, "Random Continent"));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText("C. Correct Continent");
+                    choice3.setText(getString(R.string.choice3, list.get(mNum).getContinent_answer()));
                 }
             } else {
                 rootView = (ViewGroup) inflater.inflate(
-                        R.layout.fragment_quiz_question, container, false);
+                        R.layout.fragment_advanced_question, container, false);
 
-                //get random country
-                //get correct country that neighbors it
-                //store correct country in db?
-                //get 2 other random countries that DO NOT neighbor it
-
-                TextView textView = rootView.findViewById(R.id.textView3);
-                textView.setText("Which country neighbors the United States?");
+                TextView textView = rootView.findViewById(R.id.textView4);
+                textView.setText(getString(R.string.advanced_question, list.get(mNum).getCountry()));
                 if(correctAnswer == 1) {
-                    RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText("A. Correct Country");
-                    RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText("B. Random Country");
-                    RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText("C. Random Country");
+                    RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
+                    choice1.setText(getString(R.string.choice1, list.get(mNum).getNeighbor_answer()));
+                    RadioButton choice2 = rootView.findViewById(R.id.radioButton5);
+                    choice2.setText(getString(R.string.choice2, "Random Country"));
+                    RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
+                    choice3.setText(getString(R.string.choice3, "Random Country"));
                 } else if (correctAnswer == 2) {
-                    RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText("A. Random Country");
-                    RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText("B. Correct Country");
-                    RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText("C. Random Country");
+                    RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
+                    choice1.setText(getString(R.string.choice1, "Random Country"));
+                    RadioButton choice2 = rootView.findViewById(R.id.radioButton5);
+                    choice2.setText(getString(R.string.choice2, list.get(mNum).getNeighbor_answer()));
+                    RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
+                    choice3.setText(getString(R.string.choice3, "Random Country"));
                 } else {
-                    RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText("A. Random Country");
-                    RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText("B. Random Country");
-                    RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText("C. Correct Country");
+                    RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
+                    choice1.setText(getString(R.string.choice1, "Random Country"));
+                    RadioButton choice2 = rootView.findViewById(R.id.radioButton5);
+                    choice2.setText(getString(R.string.choice2, "Random Country"));
+                    RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
+                    choice3.setText(getString(R.string.choice3, list.get(mNum).getNeighbor_answer()));
                 }
             }
 

@@ -2,6 +2,7 @@ package edu.uga.cs6060.geographyquiz;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,16 +10,19 @@ import android.util.Log;
 
 import com.opencsv.CSVReader;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuizData {
 
     public static final String TAG = "QuizData";
 
-    private SQLiteOpenHelper helper;
+    private DBHelper helper;
     private SQLiteDatabase db;
 
     public QuizData(Context context) {
@@ -45,139 +49,133 @@ public class QuizData {
      */
     public List<Question> getQuestions() {
         ArrayList<Question> questions = new ArrayList<Question>();
+        String country;
+        String[] countries = new String[12];
+        Cursor cursor;
 
         // For loop to create six questions in our list
-        // TODO: Create logic to randomly get 6 questions from DB and store them
-        for (int i =0; i < 6; i++) {
-            int random = (int) (Math.random() * 195);    // Variable to pick random country id
+        for (int i =0; i < 12; i++) {
+
+            boolean run = true;
+
+            while (run) {
+                int random = (int) (Math.random() * 599);    // Variable to pick random country id
+                cursor = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_QUESTIONS + " WHERE _id = ?", new String[]{"" + random});
+                cursor.moveToFirst();
+                country = cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_COUNTRY));
+                Log.d(TAG, "Country found: " + country);
+
+                if (!ArrayUtils.contains(countries, country)) {
+                    countries[i] = country;
+                    Question q = new Question(country, cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_CONTINENT)),
+                            cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_NEIGHBOR)));
+                    questions.add(q);
+                    run = false;
+                }
+            }
 
         }
 
+        for (Question q : questions) {
+            System.out.println(q.getCountry() + " " + q.getContinent_answer() + " " + q.getNeighbor_answer());
+        }
         return questions;
+    }
+
+    public void populateDatabase(Resources res) {
+
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM questions", null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+
+        if (count <=0 ) {
+            storeNeighbors(res);
+        }
+
+        else {
+            Log.d(TAG, "Data already existed");
+        }
+        cursor.close();
     }
 
     /**
      * @author  Tripp
      * This method should read country_continent CSV file to create our Country and Continent Table
-     * @param in_s  InputStream object made from Resources in Activity
+     * @param res The raw resource (csv file) passed from the calling activity
      */
-    public void storeBasicQuestions(InputStream in_s) {
+    private void storeNeighbors(Resources res) {
 
-        ContentValues values;
-        ContentValues continent_values;
-        Cursor cursor;
+        ContentValues values = new ContentValues();
         String continent;
-        String[] columns = {"name"};
+        String country;
+        String neighbor;
+        long id;
+
 
         try {
 
-            CSVReader csvReader = new CSVReader(new InputStreamReader(in_s));
+            CSVReader csvReader = new CSVReader(new InputStreamReader(res.openRawResource(R.raw.country_neighbors)));
             String nextLine[];
             Log.d(TAG, "In try statement");
 
             while ((nextLine = csvReader.readNext()) != null) {
 
-                Log.d(TAG, "In while statement");
+                country = nextLine[0];
+                continent = null;
 
-                values = null;
-                continent_values = null;
-                long continent_id = -1;
+                values.put(DBHelper.QUESTIONS_COUNTRY, country);
+                values.put(DBHelper.QUESTIONS_CONTINENT, continent);
 
-                continent = nextLine[1];
-                Log.d(TAG, "Continent is " + continent);
-                continent_values.put(DBHelper.CONTINENTS_NAME, continent);
-                cursor = db.query(DBHelper.TABLE_CONTINENTS, columns, "name = " + continent, null,
-                        null, null, null);
-
-                Log.d(TAG, "storeBasicQuestions: Column index: " + cursor.getLong(cursor.getColumnIndex(DBHelper.CONTINENTS_ID)));
-
-                while (cursor.moveToNext()) {
-                    continent_id = cursor.getLong(cursor.getColumnIndex(DBHelper.CONTINENTS_ID));
-                    Log.d(TAG, "storeBasicQuestions: Continent ID: " + continent_id);
+                for (int i = 1; i < nextLine.length; i++) {
+                    neighbor = nextLine[i];
+                    if (!neighbor.equals("")) { // ignore if the csv file has consecutive commas
+                        values.put(DBHelper.QUESTIONS_NEIGHBOR, neighbor);
+                        id = db.insert(DBHelper.TABLE_QUESTIONS, null, values);
+                        Log.d(TAG, "Question made, ID: " + id);
+                    }
+                    else {
+                        break;
+                    }
                 }
-
-                if (continent_id < 0) {
-                    // Query found no continent, so we make a new one
-                    continent_id = db.insert(DBHelper.TABLE_CONTINENTS, null , continent_values);
-                }
-
-                else {
-                    Log.d(TAG, "storeBasicQuestions: ID created in Continents: " + continent_id);
-                }
-
-                values.put(DBHelper.COUNTRIES_CONTINENT_ID, continent_id);
-
-                values.put(DBHelper.COUNTRIES_NAME, nextLine[0]);
-
-                long id = db.insert(DBHelper.TABLE_COUNTRIES, null, values);
-                Log.d(TAG, "storeBasicQuestions: ID created in Countries: " + id);
-
             }
-        }
 
-        catch (Exception e) {
+            // The continent column will be null after populating countries and neighbors
+            // That is why we update the continent column separately
+            updateContinents(res);
+        } catch (Exception e) {
             Log.d(TAG, "storeBasicQuestions: Exception in storeBasicQuestions()");
             Log.d(TAG, e.toString());
         }
     }
 
-    /**
-     * @author  Tripp
-     * This method should read country_neighbors CSV file to create our Neighbors Table
-     * @param in_s  InputStream object made from Resources in Activity
-     */
-    public void storeAdvancedQuestions(InputStream in_s) {
+    private void updateContinents(Resources res) {
 
-        ContentValues values;
-        Cursor cursor;
-        String[] columns = {"_id"};
         String country;
+        String continent;
+        ContentValues values = new ContentValues();
+        long id;
 
         try {
 
-            CSVReader csvReader = new CSVReader(new InputStreamReader(in_s));
+            CSVReader csvReader = new CSVReader(new InputStreamReader(res.openRawResource(R.raw.country_continent)));
             String nextLine[];
+            Log.d(TAG, "In try statement");
 
             while ((nextLine = csvReader.readNext()) != null) {
-
                 country = nextLine[0];
-                values = null;
-                long country_id = -1;
-                long neighbor_id = -1;
+                continent = nextLine[1];
 
-                cursor = db.query(DBHelper.TABLE_COUNTRIES, columns, "name = " + country,
-                        null, null, null, null);
+                values.put(DBHelper.QUESTIONS_CONTINENT, continent);
 
-                while (cursor.moveToNext()) {
-                    country_id = cursor.getLong(cursor.getColumnIndex(DBHelper.COUNTRIES_ID));
-                }
-
-                cursor.close();
-
-                values.put(DBHelper.NEIGHBORS_COUNTRY_ID, country_id);
-
-                for (int i = 1; i < nextLine.length; i++) {
-                    country = nextLine[i];
-                    cursor = db.query(DBHelper.TABLE_COUNTRIES, columns, "name = " + country,
-                            null, null, null, null);
-
-                    while(cursor.moveToNext()) {
-                        neighbor_id = cursor.getLong(cursor.getColumnIndex(DBHelper.COUNTRIES_ID));
-                    }
-                    cursor.close();
-
-                    values.put(DBHelper.NEIGHBORS_NEIGHBOR_ID, neighbor_id);
-                    long result = db.insert(DBHelper.TABLE_NEIGHBORS, null, values);
-                    Log.d(TAG, "New Neighbor Id: " + result);
-
-                    values = null;
-                    values.put(DBHelper.NEIGHBORS_COUNTRY_ID, country_id);
-                }
+                id = db.update(DBHelper.TABLE_QUESTIONS, values, "country = ?", new String[]{country});
+                Log.d(TAG, "ID " + id + " updated. Continent now: " + continent);
             }
+
         }
 
         catch (Exception e) {
-            Log.d(TAG, e.toString());
+            e.printStackTrace();
         }
     }
+
 }

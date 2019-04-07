@@ -16,4 +16,9 @@
     <string name="quiz_results">You scored an 80% on the quiz.</string>
     <string name="submit_quiz">Submit Quiz</string>
     <string name="go_home">Go Home</string>
+    <string name="basic_question">What continent is %1$s in?</string>
+    <string name="advanced_question">Which country neighbors %1$s?</string>
+    <string name="choice1">A. %1$s</string>
+    <string name="choice2">B. %1$s</string>
+    <string name="choice3">C. %1$s</string>
 </resources>
