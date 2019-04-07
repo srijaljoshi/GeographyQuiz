@@ -5,18 +5,15 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.opencsv.CSVReader;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class QuizData {
      * @author  Tripp
      * Gets a list of six questions for the quiz by querying the
      * database through SQLiteOpenHelper object
-     * @return  ArrayList of six questions
+     * @return  List of six questions
      */
     public List<Question> getQuestions() {
         ArrayList<Question> questions = new ArrayList<Question>();
@@ -61,7 +58,7 @@ public class QuizData {
         for (int i =0; i < 6; i++) {
 
             boolean run = true;
-            boolean wrongAnswerNotSet = true;
+            boolean wrongAnswerNotSet;
 
             while (run) {
                 int random = (int) (Math.random() * 599) + 1;    // Variable to pick random country id
@@ -75,6 +72,7 @@ public class QuizData {
                     Question q = new Question(cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_ID)), country, cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_CONTINENT)),
                             cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_NEIGHBOR)));
 
+                    wrongAnswerNotSet = true;
                     // Set first wrong answer as long as it is not the answer
                     while (wrongAnswerNotSet) {
 
@@ -122,15 +120,18 @@ public class QuizData {
 
                         countryCursor.close();
 
+                        boolean update = true;
+
                         if (!selection.equals(q.getCountry())) {
                             for (String s : neighbors) {
                                 if (s.equals(selection)) {
-                                    wrongAnswerNotSet = false;
+                                    update = false;
                                     break;
                                 }
                             }
 
-                            if (!wrongAnswerNotSet) {
+                            if (update) {
+                                wrongAnswerNotSet = false;
                                 q.setWrong_neighbor_1(selection);
                             }
                         }
@@ -140,6 +141,7 @@ public class QuizData {
 
                     while (wrongAnswerNotSet) {
                         int wrongAnswerRandom = (int) (Math.random() * 599);
+                        Log.d(TAG, "Random Integer: " + wrongAnswerRandom);
                         Cursor countryCursor = db.rawQuery("SELECT country FROM "
                                 + DBHelper.TABLE_QUESTIONS + " WHERE _id = ?", new String[]{"" + wrongAnswerRandom});
                         countryCursor.moveToFirst();
@@ -148,15 +150,18 @@ public class QuizData {
 
                         countryCursor.close();
 
+                        boolean update = true;
+
                         if (!selection.equals(q.getCountry()) && !selection.equals(q.getWrong_neighbor_1())) {
                             for (String s : neighbors) {
                                 if (s.equals(selection)) {
-                                    wrongAnswerNotSet = false;
+                                    update = false;
                                     break;
                                 }
                             }
 
-                            if (!wrongAnswerNotSet) {
+                            if (update) {
+                                wrongAnswerNotSet = false;
                                 q.setWrong_neighbor_2(selection);
                             }
                         }
@@ -176,6 +181,13 @@ public class QuizData {
         return questions;
     }
 
+    /**
+     * @author  Tripp
+     * Method to make an entry in the Quiz table and uses passed in List of Question objects to
+     * build Relationship table, tieing Questions with our new Quiz
+     * @param   list  List of 6 Question objects
+     * @return  returns id of Quiz entry
+     */
     public long makeQuizEntry(List<Question> list) {
 
         ContentValues values = new ContentValues();
@@ -195,6 +207,11 @@ public class QuizData {
         return id;
     }
 
+    /**
+     * @author  Tripp
+     * Method to check if data exists in database and call DB creation methods if not
+     * @param res   Activity Resources used to get CSV files
+     */
     public void populateDatabase(Resources res) {
 
         Cursor cursor = db.rawQuery("SELECT count(*) FROM questions", null);
@@ -213,8 +230,8 @@ public class QuizData {
 
     /**
      * @author  Tripp
-     * This method should read country_continent CSV file to create our Country and Continent Table
-     * @param res   Application Resources
+     * This method should read country_neighbors CSV file to create Questions table
+     * @param res   Application Resources used to access CSV files
      */
     private void storeNeighbors(Resources res) {
 
@@ -260,6 +277,12 @@ public class QuizData {
         }
     }
 
+    /**
+     * @author  Tripp
+     * This method should read country_continent CSV file to update Questions table with country's
+     * continent
+     * @param res   Application Resources used to access CSV files
+     */
     private void updateContinents(Resources res) {
 
         String country;
@@ -288,6 +311,17 @@ public class QuizData {
         catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());
         }
+    }
+
+    /**
+     *
+     * @param id
+     * @param result
+     */
+    private void storeResults(long id, int result) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.QUIZZES_RESULT, result);
+        db.update(DBHelper.TABLE_QUIZZES, values, DBHelper.QUIZZES_ID + " = ?", new String[]{"" + id} );
     }
 
 }
