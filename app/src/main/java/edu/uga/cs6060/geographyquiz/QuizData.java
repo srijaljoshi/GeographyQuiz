@@ -42,19 +42,19 @@ public class QuizData {
     }
 
     /**
-     * @author  Tripp
+     * @return ArrayList of six questions
+     * @author Tripp
      * Gets a list of six questions for the quiz by querying the
      * database through SQLiteOpenHelper object
-     * @return  ArrayList of six questions
      */
     public List<Question> getQuestions() {
         ArrayList<Question> questions = new ArrayList<Question>();
         String country;
-        String[] countries = new String[6];
+        String[] countries = new String[12];
         Cursor cursor;
 
         // For loop to create six questions in our list
-        for (int i =0; i < 6; i++) {
+        for (int i = 0; i < 12; i++) {
 
             boolean run = true;
 
@@ -88,20 +88,18 @@ public class QuizData {
         cursor.moveToFirst();
         int count = cursor.getInt(0);
 
-        if (count <=0 ) {
+        if (count <= 0) {
             storeNeighbors(res);
-        }
-
-        else {
+        } else {
             Log.d(TAG, "Data already existed");
         }
         cursor.close();
     }
 
     /**
-     * @author  Tripp
-     * This method should read country_continent CSV file to create our Country and Continent Table
      * @param res The raw resource (csv file) passed from the calling activity
+     * @author Tripp
+     * This method should read country_continent CSV file to create our Country and Continent Table
      */
     private void storeNeighbors(Resources res) {
 
@@ -132,8 +130,7 @@ public class QuizData {
                         values.put(DBHelper.QUESTIONS_NEIGHBOR, neighbor);
                         id = db.insert(DBHelper.TABLE_QUESTIONS, null, values);
                         Log.d(TAG, "Question made, ID: " + id);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -171,11 +168,8 @@ public class QuizData {
                 Log.d(TAG, "ID " + id + " updated. Continent now: " + continent);
             }
 
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

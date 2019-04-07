@@ -7,14 +7,18 @@
     <string name="image_description">Globe</string>
     <string name="basic_quiz">Basic Quiz</string>
     <string name="advanced_quiz">Advanced Quiz</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="app_name">Geography Quiz</string>
     <string name="title">Geography Quiz</string>
     <string name="start">Let\'s Start!</string>
     <string name="results">Results</string>
     <string name="info">Guess the continent the a country is on as well as its neighbor.</string>
-    <string name="basic_quiz_answer">A. North America</string>
     <string name="quiz_results">You scored an 80% on the quiz.</string>
+    <string name="submit_quiz">Submit Quiz</string>
+    <string name="go_home">Go Home</string>
+    <string name="basic_question">What continent is %1$s in?</string>
+    <string name="advanced_question">Which country neighbors %1$s?</string>
+    <string name="choice1">A. %1$s</string>
+    <string name="choice2">B. %1$s</string>
+    <string name="choice3">C. %1$s</string>
 </resources>

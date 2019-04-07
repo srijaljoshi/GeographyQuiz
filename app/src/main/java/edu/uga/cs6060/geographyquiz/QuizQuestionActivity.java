@@ -1,5 +1,6 @@
 package edu.uga.cs6060.geographyquiz;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuizQuestionActivity extends AppCompatActivity {
@@ -18,26 +18,21 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
     ViewPager mPager;
 
-    List<Question> list;
+    QuizData quizData;
+    static List<Question> questions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_question);
 
-        mAdapter = new MyAdapter(getSupportFragmentManager());
-
-        mPager = findViewById(R.id.viewPager1);
-        mPager.setAdapter(mAdapter);
-
-        QuizData quizData = new QuizData(this);
-        quizData.open();
-        list = quizData.getQuestions();
+        quizData = new QuizData(this);
+        new AsyncQuizLoaderTask().execute();
 
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {
-        public MyAdapter(FragmentManager fm) {
+        public MyAdapter(FragmentManager fm, List<Question> list) {
             super(fm);
         }
 
@@ -48,7 +43,33 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return QuizQuestionFragment.newInstance(position);
+            return QuizQuestionFragment.newInstance(position, questions);
+        }
+    }
+
+    private class AsyncQuizLoaderTask extends AsyncTask<Void, Void, List<Question>> {
+
+        /**
+         * Loads the list of questions from the database and stores it as a list of questions
+         * @param voids Nothing needs to be passed, really
+         * @return list of questions
+         */
+        @Override
+        protected List<Question> doInBackground(Void... voids) {
+            quizData.open();
+            questions = quizData.getQuestions();
+            return questions;
+        }
+
+        @Override
+        protected void onPostExecute(List<Question> questions) {
+            super.onPostExecute(questions);
+
+            mAdapter = new MyAdapter(getSupportFragmentManager(), questions);
+            mPager = findViewById(R.id.viewPager1);
+            mPager.setAdapter(mAdapter);
+
+            quizData.close();
         }
     }
 

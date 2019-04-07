@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     private final static String TAG = "SplashScreenActivity";
@@ -25,13 +26,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         Resources res = getResources();
         quizData = new QuizData(this);
 
-        // open the db and getWritableDatabase
-        quizData.open();
-
         // Call the aynctask to populate the database
-        new DBWriterTask().execute(res);
+        new AsyncDBWriterTask().execute(res);
 
         startQuiz = findViewById(R.id.button1);
+
         startQuiz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), QuizQuestionActivity.class);
@@ -54,11 +53,13 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Since we are not really passing any parameter or expecting any result, we set the
      * AsyncTask<Params, Progress, Results> to Void
      */
-    private class DBWriterTask extends AsyncTask<Resources, Void, Void> {
+    private class AsyncDBWriterTask extends AsyncTask<Resources, Void, Void> {
 
         @Override
         protected Void doInBackground(Resources... resources) {
             // Write the parameters to the database
+            // open the db and getWritableDatabase
+            quizData.open();
             quizData.populateDatabase(resources[0]);
             return null;
         }
@@ -66,6 +67,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            quizData.close();
 //            // Show a quick confirmation
 //            Toast.makeText( getApplicationContext(), "Basic Questions created and populated!",
 //                    Toast.LENGTH_SHORT).show();
