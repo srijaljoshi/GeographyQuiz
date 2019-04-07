@@ -62,56 +62,56 @@ public class QuizQuestionFragment extends Fragment {
                         R.layout.fragment_basic_question, container, false);
 
                 TextView textView = rootView.findViewById(R.id.textView3);
-                textView.setText(getString(R.string.basic_question, list.get(mNum).getCountry()));
+                textView.setText(getString(R.string.basic_question, list.get(mNum/2).getCountry()));
                 if(correctAnswer == 1) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText(getString(R.string.choice1, list.get(mNum).getContinent_answer()));
+                    choice1.setText(getString(R.string.choice1, list.get(mNum/2).getContinent_answer()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText(getString(R.string.choice2, "Random Continent"));
+                    choice2.setText(getString(R.string.choice2, list.get(mNum/2).getWrong_continent_1()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText(getString(R.string.choice3, "Random Continent"));
+                    choice3.setText(getString(R.string.choice3, list.get(mNum/2).getWrong_continent_2()));
                 } else if (correctAnswer == 2) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText(getString(R.string.choice1, "Random Continent"));
+                    choice1.setText(getString(R.string.choice1, list.get(mNum/2).getWrong_continent_1()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText(getString(R.string.choice2, list.get(mNum).getContinent_answer()));
+                    choice2.setText(getString(R.string.choice2, list.get(mNum/2).getContinent_answer()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText(getString(R.string.choice3, "Random Continent"));
+                    choice3.setText(getString(R.string.choice3, list.get(mNum/2).getWrong_continent_2()));
                 } else {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton1);
-                    choice1.setText(getString(R.string.choice1, "Random Continent"));
+                    choice1.setText(getString(R.string.choice1, list.get(mNum/2).getWrong_continent_1()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton2);
-                    choice2.setText(getString(R.string.choice2, "Random Continent"));
+                    choice2.setText(getString(R.string.choice2, list.get(mNum/2).getWrong_continent_2()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton3);
-                    choice3.setText(getString(R.string.choice3, list.get(mNum).getContinent_answer()));
+                    choice3.setText(getString(R.string.choice3, list.get(mNum/2).getContinent_answer()));
                 }
             } else {
                 rootView = (ViewGroup) inflater.inflate(
                         R.layout.fragment_advanced_question, container, false);
 
                 TextView textView = rootView.findViewById(R.id.textView4);
-                textView.setText(getString(R.string.advanced_question, list.get(mNum).getCountry()));
+                textView.setText(getString(R.string.advanced_question, list.get(mNum/2).getCountry()));
                 if(correctAnswer == 1) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
-                    choice1.setText(getString(R.string.choice1, list.get(mNum).getNeighbor_answer()));
+                    choice1.setText(getString(R.string.choice1, list.get(mNum/2).getNeighbor_answer()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton5);
-                    choice2.setText(getString(R.string.choice2, "Random Country"));
+                    choice2.setText(getString(R.string.choice2, list.get(mNum/2).getWrong_neighbor_1()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
-                    choice3.setText(getString(R.string.choice3, "Random Country"));
+                    choice3.setText(getString(R.string.choice3, list.get(mNum/2).getWrong_neighbor_2()));
                 } else if (correctAnswer == 2) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
-                    choice1.setText(getString(R.string.choice1, "Random Country"));
+                    choice1.setText(getString(R.string.choice1, list.get(mNum/2).getWrong_neighbor_1()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton5);
-                    choice2.setText(getString(R.string.choice2, list.get(mNum).getNeighbor_answer()));
+                    choice2.setText(getString(R.string.choice2, list.get(mNum/2).getNeighbor_answer()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
-                    choice3.setText(getString(R.string.choice3, "Random Country"));
+                    choice3.setText(getString(R.string.choice3, list.get(mNum/2).getWrong_neighbor_2()));
                 } else {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
-                    choice1.setText(getString(R.string.choice1, "Random Country"));
+                    choice1.setText(getString(R.string.choice1, list.get(mNum/2).getWrong_neighbor_1()));
                     RadioButton choice2 = rootView.findViewById(R.id.radioButton5);
-                    choice2.setText(getString(R.string.choice2, "Random Country"));
+                    choice2.setText(getString(R.string.choice2, list.get(mNum/2).getWrong_neighbor_2()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
-                    choice3.setText(getString(R.string.choice3, list.get(mNum).getNeighbor_answer()));
+                    choice3.setText(getString(R.string.choice3, list.get(mNum/2).getNeighbor_answer()));
                 }
             }
 

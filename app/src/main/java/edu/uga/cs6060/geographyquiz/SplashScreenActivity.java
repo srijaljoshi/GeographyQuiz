@@ -46,6 +46,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+
     }
 
     /**
@@ -66,6 +67,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            quizData.close();
 //            // Show a quick confirmation
 //            Toast.makeText( getApplicationContext(), "Basic Questions created and populated!",
 //                    Toast.LENGTH_SHORT).show();
