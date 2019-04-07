@@ -29,22 +29,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Call the aynctask to populate the database
         new AsyncDBWriterTask().execute(res);
 
-        startQuiz = findViewById(R.id.button1);
-
-        startQuiz.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), QuizQuestionActivity.class);
-                v.getContext().startActivity(intent);
-            }
-        });
-
-        viewResults = findViewById(R.id.button2);
-        viewResults.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PastResultsActivity.class);
-                v.getContext().startActivity(intent);
-            }
-        });
     }
 
     /**
@@ -68,6 +52,25 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             quizData.close();
+
+            startQuiz = findViewById(R.id.button1);
+
+            startQuiz.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), QuizQuestionActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
+
+            viewResults = findViewById(R.id.button2);
+            viewResults.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PastResultsActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
+
+
 //            // Show a quick confirmation
 //            Toast.makeText( getApplicationContext(), "Basic Questions created and populated!",
 //                    Toast.LENGTH_SHORT).show();

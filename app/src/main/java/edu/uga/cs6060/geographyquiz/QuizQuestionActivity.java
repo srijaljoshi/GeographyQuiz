@@ -21,6 +21,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
     QuizData quizData;
     static List<Question> questions;
 
+    long id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
