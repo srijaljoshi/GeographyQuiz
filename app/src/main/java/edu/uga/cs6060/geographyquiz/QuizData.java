@@ -319,7 +319,7 @@ public class QuizData {
      * @param id
      * @param result
      */
-    private void storeResults(long id, int result) {
+    public void storeResults(long id, int result) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.QUIZZES_RESULT, result);
         db.update(DBHelper.TABLE_QUIZZES, values, DBHelper.QUIZZES_ID + " = ?", new String[]{"" + id} );

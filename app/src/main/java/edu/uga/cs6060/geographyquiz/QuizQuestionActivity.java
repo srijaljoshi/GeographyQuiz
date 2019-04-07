@@ -19,6 +19,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
     static List<Question> list;
 
+    static long quizId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,17 +30,18 @@ public class QuizQuestionActivity extends AppCompatActivity {
         QuizData quizData = new QuizData(this);
         quizData.open();
         list = quizData.getQuestions();
+        quizId = quizData.makeQuizEntry(list);
 
-
-        mAdapter = new MyAdapter(getSupportFragmentManager(), list);
+        mAdapter = new MyAdapter(getSupportFragmentManager(), list, quizId);
 
         mPager = findViewById(R.id.viewPager1);
+        mPager.setOffscreenPageLimit(12);
         mPager.setAdapter(mAdapter);
 
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {
-        public MyAdapter(FragmentManager fm, List<Question> list) {
+        public MyAdapter(FragmentManager fm, List<Question> list, long quizId) {
             super(fm);
         }
 
@@ -49,7 +52,7 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return QuizQuestionFragment.newInstance(position, list);
+            return QuizQuestionFragment.newInstance(position, list, quizId);
         }
     }
 
