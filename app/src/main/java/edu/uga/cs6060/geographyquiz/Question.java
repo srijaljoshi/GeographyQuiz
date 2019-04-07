@@ -40,7 +40,8 @@ public class Question {
      * @param continent_answer  continent country belongs to
      * @param neighbor_answer   neighbor of country
      */
-    public Question(String country, String continent_answer, String neighbor_answer) {
+    public Question(String id, String country, String continent_answer, String neighbor_answer) {
+        this.id = id;
         this.country = country;
         this.continent_answer = continent_answer;
         this.neighbor_answer = neighbor_answer;

@@ -14,8 +14,10 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class QuizData {
@@ -70,7 +72,7 @@ public class QuizData {
 
                 if (!ArrayUtils.contains(countries, country)) {
                     countries[i] = country;
-                    Question q = new Question(country, cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_CONTINENT)),
+                    Question q = new Question(cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_ID)), country, cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_CONTINENT)),
                             cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_NEIGHBOR)));
 
                     // Set first wrong answer as long as it is not the answer
@@ -172,6 +174,25 @@ public class QuizData {
             System.out.println("Wrong answers: " + q.getWrong_continent_1() + " " + q.getWrong_continent_2() + " " + q.getWrong_neighbor_1() + " " + q.getWrong_neighbor_2());
         }
         return questions;
+    }
+
+    public long makeQuizEntry(List<Question> list) {
+
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.QUIZZES_DATE, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        long id = db.insert(DBHelper.TABLE_QUIZZES, null, values);
+        Log.d(TAG, "New Quiz ID: " + id);
+
+        values = new ContentValues();
+        values.put(DBHelper.RELATIONSHIPS_QUIZ_ID, id);
+
+        for (Question q : list) {
+            values.put(DBHelper.RELATIONSHIPS_QUESTION_ID, q.getId());
+            long relID = db.insert(DBHelper.TABLE_RELATIONSHIPS, null, values);
+            Log.d(TAG, "New relationship ID: " + relID);
+        }
+
+        return id;
     }
 
     public void populateDatabase(Resources res) {

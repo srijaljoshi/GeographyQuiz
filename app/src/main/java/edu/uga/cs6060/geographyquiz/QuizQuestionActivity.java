@@ -20,6 +20,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
 
     List<Question> list;
 
+    long id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,8 @@ public class QuizQuestionActivity extends AppCompatActivity {
         QuizData quizData = new QuizData(this);
         quizData.open();
         list = quizData.getQuestions();
+        id = quizData.makeQuizEntry(list);
+
 
     }
 
