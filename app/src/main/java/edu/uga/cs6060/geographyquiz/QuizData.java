@@ -53,13 +53,16 @@ public class QuizData {
         String[] countries = new String[6];
         Cursor cursor;
 
+        String[] continents = {"Asia", "Europe", "Africa", "North America", "South America", "Oceania"};
+
         // For loop to create six questions in our list
         for (int i =0; i < 6; i++) {
 
             boolean run = true;
+            boolean wrongAnswerNotSet = true;
 
             while (run) {
-                int random = (int) (Math.random() * 599);    // Variable to pick random country id
+                int random = (int) (Math.random() * 599) + 1;    // Variable to pick random country id
                 cursor = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_QUESTIONS + " WHERE _id = ?", new String[]{"" + random});
                 cursor.moveToFirst();
                 country = cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_COUNTRY));
@@ -69,6 +72,94 @@ public class QuizData {
                     countries[i] = country;
                     Question q = new Question(country, cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_CONTINENT)),
                             cursor.getString(cursor.getColumnIndex(DBHelper.QUESTIONS_NEIGHBOR)));
+
+                    // Set first wrong answer as long as it is not the answer
+                    while (wrongAnswerNotSet) {
+
+                        int wrongAnswerRandom = (int) ((Math.random() * 5));
+
+                        if (!continents[wrongAnswerRandom].equals(q.getContinent_answer())) {
+                            q.setWrong_continent_1(continents[wrongAnswerRandom]);
+                            wrongAnswerNotSet = false;
+                        }
+                    }
+
+                    wrongAnswerNotSet = true;
+
+                    // Set second wrong answer as long as it is not the answer or the previous
+                    // wrong answer
+                    while (wrongAnswerNotSet) {
+                        int wrongAnswerRandom = (int) ((Math.random() * 5));
+
+                        if (!continents[wrongAnswerRandom].equals(q.getContinent_answer()) &&
+                                !continents[wrongAnswerRandom].equals(q.getWrong_continent_1())) {
+                            q.setWrong_continent_2(continents[wrongAnswerRandom]);
+                            wrongAnswerNotSet = false;
+                        }
+                    }
+
+                    ArrayList<String> neighbors = new ArrayList<String>();
+                    Cursor neighborsCursor = db.rawQuery("SELECT neighbor FROM "
+                            + DBHelper.TABLE_QUESTIONS + " WHERE country = ?", new String[]{q.getCountry()});
+                    neighborsCursor.moveToFirst();
+                    while(!neighborsCursor.isAfterLast()) {
+                        neighbors.add(neighborsCursor.getString(neighborsCursor.getColumnIndex("neighbor")));
+                        neighborsCursor.moveToNext();
+                    }
+                    neighborsCursor.close();
+
+                    wrongAnswerNotSet = true;
+
+                    while (wrongAnswerNotSet) {
+                        int wrongAnswerRandom = (int) (Math.random() * 599);
+                        Cursor countryCursor = db.rawQuery("SELECT " + DBHelper.QUESTIONS_COUNTRY + " FROM "
+                                + DBHelper.TABLE_QUESTIONS + " WHERE " + DBHelper.QUESTIONS_ID + " = ?", new String[]{"" + wrongAnswerRandom});
+                        countryCursor.moveToFirst();
+
+                        String selection = countryCursor.getString(countryCursor.getColumnIndex("country"));
+
+                        countryCursor.close();
+
+                        if (!selection.equals(q.getCountry())) {
+                            for (String s : neighbors) {
+                                if (s.equals(selection)) {
+                                    wrongAnswerNotSet = false;
+                                    break;
+                                }
+                            }
+
+                            if (!wrongAnswerNotSet) {
+                                q.setWrong_neighbor_1(selection);
+                            }
+                        }
+                    }
+
+                    wrongAnswerNotSet = true;
+
+                    while (wrongAnswerNotSet) {
+                        int wrongAnswerRandom = (int) (Math.random() * 599);
+                        Cursor countryCursor = db.rawQuery("SELECT country FROM "
+                                + DBHelper.TABLE_QUESTIONS + " WHERE _id = ?", new String[]{"" + wrongAnswerRandom});
+                        countryCursor.moveToFirst();
+
+                        String selection = countryCursor.getString(countryCursor.getColumnIndex("country"));
+
+                        countryCursor.close();
+
+                        if (!selection.equals(q.getCountry()) && !selection.equals(q.getWrong_neighbor_1())) {
+                            for (String s : neighbors) {
+                                if (s.equals(selection)) {
+                                    wrongAnswerNotSet = false;
+                                    break;
+                                }
+                            }
+
+                            if (!wrongAnswerNotSet) {
+                                q.setWrong_neighbor_2(selection);
+                            }
+                        }
+                    }
+
                     questions.add(q);
                     run = false;
                 }
@@ -77,7 +168,8 @@ public class QuizData {
         }
 
         for (Question q : questions) {
-            System.out.println(q.country + " " + q.continent_answer + " " + q.neighbor_answer);
+            System.out.println(q.getCountry() + " " + q.getContinent_answer() + " " + q.getNeighbor_answer());
+            System.out.println("Wrong answers: " + q.getWrong_continent_1() + " " + q.getWrong_continent_2() + " " + q.getWrong_neighbor_1() + " " + q.getWrong_neighbor_2());
         }
         return questions;
     }
@@ -101,7 +193,7 @@ public class QuizData {
     /**
      * @author  Tripp
      * This method should read country_continent CSV file to create our Country and Continent Table
-     * @param res
+     * @param res   Application Resources
      */
     private void storeNeighbors(Resources res) {
 
@@ -147,7 +239,7 @@ public class QuizData {
         }
     }
 
-    public void updateContinents(Resources res) {
+    private void updateContinents(Resources res) {
 
         String country;
         String continent;
@@ -173,7 +265,7 @@ public class QuizData {
         }
 
         catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
 
