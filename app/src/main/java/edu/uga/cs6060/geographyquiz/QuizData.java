@@ -314,9 +314,10 @@ public class QuizData {
     }
 
     /**
-     *
-     * @param id
-     * @param result
+     * @author Tripp
+     * Method to update the results column of a quiz
+     * @param id        ID of entry in Quiz Table
+     * @param result    Result to be stored
      */
     private void storeResults(long id, int result) {
         ContentValues values = new ContentValues();
