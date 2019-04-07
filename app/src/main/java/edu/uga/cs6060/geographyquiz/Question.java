@@ -6,6 +6,7 @@ package edu.uga.cs6060.geographyquiz;
  * Also holds incorrect answers and answer given by user
  */
 public class Question {
+    String id;
     String country;
 
     String continent_answer;
@@ -18,21 +19,10 @@ public class Question {
     String wrong_neighbor_2;
     String given_neighbor;
 
-    /**
-     * Constructor to set all fields
-     * @param country
-     * @param continent_answer
-     * @param wrong_continent_1
-     * @param wrong_continent_2
-     * @param given_continent
-     * @param neighbor_answer
-     * @param wrong_neighbor_1
-     * @param wrong_neighbor_2
-     * @param given_neighbor
-     */
-    public Question(String country, String continent_answer, String wrong_continent_1,
+    public Question(String id, String country, String continent_answer, String wrong_continent_1,
                     String wrong_continent_2, String given_continent, String neighbor_answer,
                     String wrong_neighbor_1, String wrong_neighbor_2, String given_neighbor) {
+        this.id = id;
         this.country = country;
         this.continent_answer = continent_answer;
         this.wrong_continent_1 = wrong_continent_1;
@@ -54,6 +44,14 @@ public class Question {
         this.country = country;
         this.continent_answer = continent_answer;
         this.neighbor_answer = neighbor_answer;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCountry() {
