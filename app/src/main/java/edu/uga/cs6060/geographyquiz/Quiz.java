@@ -43,4 +43,13 @@ public class Quiz {
     public void setResult(Integer result) {
         this.result = result;
     }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "_id=" + _id +
+                ", date='" + date + '\'' +
+                ", result=" + result +
+                '}';
+    }
 }

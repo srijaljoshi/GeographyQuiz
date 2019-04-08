@@ -330,10 +330,10 @@ public class QuizData {
      */
     public List<Quiz> getQuizResults() {
         List<Quiz> quizzes = new ArrayList<>();
-        Quiz quiz = new Quiz();
         Cursor cursor = db.rawQuery("select * from quizzes", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
+            Quiz quiz = new Quiz();
             quiz.set_id(cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZZES_ID)));
             quiz.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.QUIZZES_DATE)));
             quiz.setResult(cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZZES_RESULT)));
@@ -342,11 +342,6 @@ public class QuizData {
             cursor.moveToNext();
         }
 
-        for (Quiz q : quizzes) {
-            if (q.getResult() != null) {
-                Log.d(TAG, "_id: " + q.get_id() + " date: " + q.getDate() + " result: " + q.getResult());
-            }
-        }
         return quizzes;
     }
 }
