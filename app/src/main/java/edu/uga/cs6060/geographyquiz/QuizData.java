@@ -338,7 +338,6 @@ public class QuizData {
             quiz.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.QUIZZES_DATE)));
             quiz.setResult(cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZZES_RESULT)));
             quizzes.add(quiz);
-//            Log.d(TAG, "_id: " + quiz.get_id() + " date: " + quiz.getDate() + " result: " + quiz.getResult());
             cursor.moveToNext();
         }
 

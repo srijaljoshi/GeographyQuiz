@@ -58,9 +58,7 @@ public class PastResultsActivity extends AppCompatActivity {
 
     public void logQuizzes() {
         for (Quiz quiz : mQuizList) {
-            if (quiz.getResult() != null) {
-                Log.d(TAG, "_id: " + quiz.get_id() + " date: " + quiz.getDate() + " result: " + quiz.getResult());
-            }
+                Log.d(TAG, "Quiz: " + quiz);
         }
     }
 
