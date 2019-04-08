@@ -64,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_QUIZZES = "create table if not exists " + TABLE_QUIZZES + "("
             + QUIZZES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + QUIZZES_DATE + " DATE, "
+            + QUIZZES_DATE + " TEXT, "
             + QUIZZES_RESULT + " INTEGER"
             + ")";
 
