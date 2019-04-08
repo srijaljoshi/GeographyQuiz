@@ -258,14 +258,22 @@ public class QuizData {
                 values.put(DBHelper.QUESTIONS_COUNTRY, country);
                 values.put(DBHelper.QUESTIONS_CONTINENT, continent);
 
-                for (int i = 1; i < nextLine.length; i++) {
-                    neighbor = nextLine[i];
-                    if (!neighbor.equals("")) {
-                        values.put(DBHelper.QUESTIONS_NEIGHBOR, neighbor);
-                        id = db.insert(DBHelper.TABLE_QUESTIONS, null, values);
-                        Log.d(TAG, "Question made, ID: " + id);
-                    } else {
-                        break;
+                if (nextLine[1].equals("")) {
+                    values.put(DBHelper.QUESTIONS_NEIGHBOR, "No Neighbor");
+                    db.insert(DBHelper.TABLE_QUESTIONS, null, values);
+                }
+
+                else {
+
+                    for (int i = 1; i < nextLine.length; i++) {
+                        neighbor = nextLine[i];
+                        if (!neighbor.equals("")) {
+                            values.put(DBHelper.QUESTIONS_NEIGHBOR, neighbor);
+                            id = db.insert(DBHelper.TABLE_QUESTIONS, null, values);
+                            Log.d(TAG, "Question made, ID: " + id);
+                        } else {
+                            break;
+                        }
                     }
                 }
             }
