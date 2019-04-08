@@ -131,6 +131,7 @@ public class QuizQuestionFragment extends Fragment {
                     choice2.setText(getString(R.string.choice2, list.get(mNum / 2).getWrong_neighbor_1()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
                     choice3.setText(getString(R.string.choice3, list.get(mNum / 2).getWrong_neighbor_2()));
+                    RadioButton choice4 = rootView.findViewById(R.id.radioButton8);
                 } else if (correctAnswer == 2) {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
                     choice1.setText(getString(R.string.choice1, list.get(mNum / 2).getWrong_neighbor_1()));
@@ -138,6 +139,8 @@ public class QuizQuestionFragment extends Fragment {
                     choice2.setText(getString(R.string.choice2, list.get(mNum / 2).getNeighbor_answer()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
                     choice3.setText(getString(R.string.choice3, list.get(mNum / 2).getWrong_neighbor_2()));
+                    RadioButton choice4 = rootView.findViewById(R.id.radioButton8);
+
                 } else {
                     RadioButton choice1 = rootView.findViewById(R.id.radioButton4);
                     choice1.setText(getString(R.string.choice1, list.get(mNum / 2).getWrong_neighbor_1()));
@@ -145,6 +148,8 @@ public class QuizQuestionFragment extends Fragment {
                     choice2.setText(getString(R.string.choice2, list.get(mNum / 2).getWrong_neighbor_2()));
                     RadioButton choice3 = rootView.findViewById(R.id.radioButton6);
                     choice3.setText(getString(R.string.choice3, list.get(mNum / 2).getNeighbor_answer()));
+                    RadioButton choice4 = rootView.findViewById(R.id.radioButton8);
+
                 }
             }
 
