@@ -321,4 +321,31 @@ public class QuizData {
         values.put(DBHelper.QUIZZES_RESULT, result);
         db.update(DBHelper.TABLE_QUIZZES, values, DBHelper.QUIZZES_ID + " = ?", new String[]{"" + id});
     }
+
+
+    /**
+     * @author Srijal
+     * Returns all of the quiz results from the database
+     * @return List of quizzes
+     */
+    public List<Quiz> getQuizResults() {
+        List<Quiz> quizzes = new ArrayList<>();
+        Quiz quiz = new Quiz();
+        Cursor cursor = db.rawQuery("select * from quizzes", null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            quiz.set_id(cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZZES_ID)));
+            quiz.setDate(cursor.getString(cursor.getColumnIndex(DBHelper.QUIZZES_DATE)));
+            quiz.setResult(cursor.getInt(cursor.getColumnIndex(DBHelper.QUIZZES_RESULT)));
+            quizzes.add(quiz);
+//            Log.d(TAG, "_id: " + quiz.get_id() + " date: " + quiz.getDate() + " result: " + quiz.getResult());
+            cursor.moveToNext();
+        }
+
+        System.out.println("_id: " + quizzes.get(0).get_id() + " date: " + quizzes.get(0).getDate() + " result: " + quizzes.get(0).getResult());
+        System.out.println("_id: " + quizzes.get(1).get_id() + " date: " + quizzes.get(1).getDate() + " result: " + quizzes.get(1).getResult());
+        System.out.println("_id: " + quizzes.get(2).get_id() + " date: " + quizzes.get(2).getDate() + " result: " + quizzes.get(2).getResult());
+
+        return quizzes;
+    }
 }
