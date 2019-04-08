@@ -5,15 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class QuizResultsActivity extends AppCompatActivity {
+
+    TextView quizResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_results);
 
-        //change text based on user selections
+        int quizScore = getIntent().getIntExtra("quizScore", 0);
+
+        quizResults = findViewById(R.id.textView5);
+
+        quizResults.setText(getString(R.string.quiz_results, Integer.toString(quizScore)));
 
         Button goHome = findViewById(R.id.button4);
         goHome.setOnClickListener(new View.OnClickListener() {

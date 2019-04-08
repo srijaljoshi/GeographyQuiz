@@ -34,8 +34,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     /**
      * @author Srijal Joshi
      * This inner class is used to populate the the countries and neighbors table aynchronously
-     * Since we are not really passing any parameter or expecting any result, we set the
-     * AsyncTask<Params, Progress, Results> to Void
+     * Since we are passing a Resources object as the parameter, we set the
+     * AsyncTask<Resources, Progress, Results>  as such
      */
     private class AsyncDBWriterTask extends AsyncTask<Resources, Void, Void> {
 
@@ -51,8 +51,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            quizData.close();
 
+            quizData.close();
             startQuiz = findViewById(R.id.button1);
 
             startQuiz.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +69,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     v.getContext().startActivity(intent);
                 }
             });
-
 
 //            // Show a quick confirmation
 //            Toast.makeText( getApplicationContext(), "Basic Questions created and populated!",

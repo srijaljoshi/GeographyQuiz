@@ -6,7 +6,6 @@ package edu.uga.cs6060.geographyquiz;
  * Also holds incorrect answers and answer given by user
  */
 public class Question {
-
     String id;
     String country;
 
@@ -37,9 +36,10 @@ public class Question {
 
     /**
      * Constructor to set country and answer information from SQLite Database
-     * @param country           name of country
-     * @param continent_answer  continent country belongs to
-     * @param neighbor_answer   neighbor of country
+     *
+     * @param country          name of country
+     * @param continent_answer continent country belongs to
+     * @param neighbor_answer  neighbor of country
      */
     public Question(String id, String country, String continent_answer, String neighbor_answer) {
         this.id = id;

@@ -23,6 +23,7 @@ public class QuizData {
 
     private DBHelper helper;
     private SQLiteDatabase db;
+    private static final int NUM_QUESTIONS = 6;
 
     public QuizData(Context context) {
         this.helper = DBHelper.getInstance(context);
@@ -41,21 +42,21 @@ public class QuizData {
     }
 
     /**
+     * @return List of six questions
      * @author Tripp
      * Gets a list of six questions for the quiz by querying the
      * database through SQLiteOpenHelper object
-     * @return  List of six questions
      */
     public List<Question> getQuestions() {
         ArrayList<Question> questions = new ArrayList<Question>();
         String country;
-        String[] countries = new String[12];
+        String[] countries = new String[NUM_QUESTIONS];
         Cursor cursor;
 
         String[] continents = {"Asia", "Europe", "Africa", "North America", "South America", "Oceania"};
 
         // For loop to create six questions in our list
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < NUM_QUESTIONS; i++) {
 
             boolean run = true;
             boolean wrongAnswerNotSet;
@@ -102,6 +103,7 @@ public class QuizData {
                     Cursor neighborsCursor = db.rawQuery("SELECT neighbor FROM "
                             + DBHelper.TABLE_QUESTIONS + " WHERE country = ?", new String[]{q.getCountry()});
                     neighborsCursor.moveToFirst();
+
                     while (!neighborsCursor.isAfterLast()) {
                         neighbors.add(neighborsCursor.getString(neighborsCursor.getColumnIndex("neighbor")));
                         neighborsCursor.moveToNext();
@@ -182,11 +184,11 @@ public class QuizData {
     }
 
     /**
-     * @author  Tripp
+     * @param list List of 6 Question objects
+     * @return returns id of Quiz entry
+     * @author Tripp
      * Method to make an entry in the Quiz table and uses passed in List of Question objects to
      * build Relationship table, tieing Questions with our new Quiz
-     * @param   list  List of 6 Question objects
-     * @return  returns id of Quiz entry
      */
     public long makeQuizEntry(List<Question> list) {
 
@@ -208,11 +210,11 @@ public class QuizData {
     }
 
     /**
-     * @author  Tripp
+     * @param res Activity Resources used to get CSV files
+     * @author Tripp
      * Method to check if data exists in database and call DB creation methods if not
-     * @param res   Activity Resources used to get CSV files
      */
-    public void populateDatabase(Resources res) {
+    public void     populateDatabase(Resources res) {
 
         Cursor cursor = db.rawQuery("SELECT count(*) FROM questions", null);
         cursor.moveToFirst();
@@ -223,13 +225,14 @@ public class QuizData {
         } else {
             Log.d(TAG, "Data already existed");
         }
-        cursor.close();
+
     }
 
     /**
+     * This method should read country_continent CSV file to create our Country and Continent Table
+     *
      * @param res The raw resource (csv file) passed from the calling activity
      * @author Tripp
-     * This method should read country_continent CSV file to create our Country and Continent Table
      */
     private void storeNeighbors(Resources res) {
 
@@ -250,13 +253,14 @@ public class QuizData {
 
                 country = nextLine[0];
                 continent = null;
+                id = -1;
 
                 values.put(DBHelper.QUESTIONS_COUNTRY, country);
                 values.put(DBHelper.QUESTIONS_CONTINENT, continent);
 
                 for (int i = 1; i < nextLine.length; i++) {
                     neighbor = nextLine[i];
-                    if (!neighbor.equals("")) { // ignore if the csv file has consecutive commas
+                    if (!neighbor.equals("")) {
                         values.put(DBHelper.QUESTIONS_NEIGHBOR, neighbor);
                         id = db.insert(DBHelper.TABLE_QUESTIONS, null, values);
                         Log.d(TAG, "Question made, ID: " + id);
@@ -266,8 +270,6 @@ public class QuizData {
                 }
             }
 
-            // The continent column will be null after populating countries and neighbors
-            // That is why we update the continent column separately
             updateContinents(res);
         } catch (Exception e) {
             Log.d(TAG, "storeBasicQuestions: Exception in storeBasicQuestions()");
@@ -276,10 +278,10 @@ public class QuizData {
     }
 
     /**
-     * @author  Tripp
+     * @param res Application Resources used to access CSV files
+     * @author Tripp
      * This method should read country_continent CSV file to update Questions table with country's
      * continent
-     * @param res   Application Resources used to access CSV files
      */
     private void updateContinents(Resources res) {
 
@@ -303,22 +305,20 @@ public class QuizData {
                 id = db.update(DBHelper.TABLE_QUESTIONS, values, "country = ?", new String[]{country});
                 Log.d(TAG, "ID " + id + " updated. Continent now: " + continent);
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
 
     /**
+     * @param id     ID of entry in Quiz Table
+     * @param result Result to be stored
      * @author Tripp
      * Method to update the results column of a quiz
-     * @param id        ID of entry in Quiz Table
-     * @param result    Result to be stored
      */
-    private void storeResults(long id, int result) {
+    public void storeResults(long id, int result) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.QUIZZES_RESULT, result);
-        db.update(DBHelper.TABLE_QUIZZES, values, DBHelper.QUIZZES_ID + " = ?", new String[]{"" + id} );
+        db.update(DBHelper.TABLE_QUIZZES, values, DBHelper.QUIZZES_ID + " = ?", new String[]{"" + id});
     }
-
 }
