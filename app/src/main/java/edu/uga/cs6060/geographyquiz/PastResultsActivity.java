@@ -20,23 +20,17 @@ public class PastResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_past_results);
 
         quizData = new QuizData(this);
-        quizData.open();
-        quizzes = quizData.getQuizResults();
-        logQuizzes();
-//        new AsyncQuizResultsTask().execute();
+
+        new AsyncQuizResultsTask().execute();
 
     }
 
     public void logQuizzes() {
         for (Quiz quiz : quizzes) {
             if (quiz.getResult() != null) {
-//                Log.d(TAG, "_id: " + quiz.get_id() + " date: " + quiz.getDate() + " result: " + quiz.getResult());
+                Log.d(TAG, "_id: " + quiz.get_id() + " date: " + quiz.getDate() + " result: " + quiz.getResult());
             }
         }
-
-        System.out.println("_id: " + quizzes.get(0).get_id() + " date: " + quizzes.get(0).getDate() + " result: " + quizzes.get(0).getResult());
-        System.out.println("_id: " + quizzes.get(1).get_id() + " date: " + quizzes.get(1).getDate() + " result: " + quizzes.get(1).getResult());
-        System.out.println("_id: " + quizzes.get(2).get_id() + " date: " + quizzes.get(2).getDate() + " result: " + quizzes.get(2).getResult());
     }
 
 
@@ -52,7 +46,7 @@ public class PastResultsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Quiz> quizzes) {
             super.onPostExecute(quizzes);
-//            logQuizzes();
+            logQuizzes();
         }
     }
 

@@ -342,10 +342,11 @@ public class QuizData {
             cursor.moveToNext();
         }
 
-        System.out.println("_id: " + quizzes.get(0).get_id() + " date: " + quizzes.get(0).getDate() + " result: " + quizzes.get(0).getResult());
-        System.out.println("_id: " + quizzes.get(1).get_id() + " date: " + quizzes.get(1).getDate() + " result: " + quizzes.get(1).getResult());
-        System.out.println("_id: " + quizzes.get(2).get_id() + " date: " + quizzes.get(2).getDate() + " result: " + quizzes.get(2).getResult());
-
+        for (Quiz q : quizzes) {
+            if (q.getResult() != null) {
+                Log.d(TAG, "_id: " + q.get_id() + " date: " + q.getDate() + " result: " + q.getResult());
+            }
+        }
         return quizzes;
     }
 }

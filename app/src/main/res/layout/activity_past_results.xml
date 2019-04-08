@@ -8,7 +8,7 @@
     tools:context=".PastResultsActivity">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tvResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -23,5 +23,11 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvResults" />
 
 </android.support.constraint.ConstraintLayout>
