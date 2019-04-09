@@ -47,12 +47,12 @@
             android:textSize="20sp" />
 
         <RadioButton
-            android:id="@+id/radioButton8"
+            android:id="@+id/radioButton7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:text="No Neighbor"
+            android:text="@string/choice4"
             android:textSize="20sp" />
     </RadioGroup>
 
